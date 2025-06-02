@@ -1,0 +1,424 @@
+{
+    "users": [
+        {
+        "id": 1,
+        "firstName": "Emily",
+        "lastName": "Johnson",
+        "email": "emily.johnson@x.dummyjson.com",
+        "phone": "+81 965-431-3024",
+        "gender": "female",
+        "role": "admin",
+        "address": {
+            "address": "626 Main Street",
+            "city": "Phoenix",
+            "state": "Mississippi"
+        }
+        },
+        {
+        "id": 2,
+        "firstName": "Michael",
+        "lastName": "Williams",
+        "email": "michael.williams@x.dummyjson.com",
+        "phone": "+49 258-627-6644",
+        "gender": "male",
+        "role": "admin",
+        "address": {
+            "address": "385 Fifth Street",
+            "city": "Houston",
+            "state": "Alabama"
+        }
+        },
+        {
+        "id": 3,
+        "firstName": "Sophia",
+        "lastName": "Brown",
+        "email": "sophia.brown@x.dummyjson.com",
+        "phone": "+81 210-652-2785",
+        "gender": "female",
+        "role": "admin",
+        "address": {
+            "address": "1642 Ninth Street",
+            "city": "Washington",
+            "state": "Alabama"
+        }
+        },
+        {
+        "id": 4,
+        "firstName": "James",
+        "lastName": "Davis",
+        "email": "james.davis@x.dummyjson.com",
+        "phone": "+49 614-958-9364",
+        "gender": "male",
+        "role": "admin",
+        "address": {
+            "address": "238 Jefferson Street",
+            "city": "Seattle",
+            "state": "Pennsylvania"
+        }
+        },
+        {
+        "id": 5,
+        "firstName": "Emma",
+        "lastName": "Miller",
+        "email": "emma.miller@x.dummyjson.com",
+        "phone": "+91 759-776-1614",
+        "gender": "female",
+        "role": "admin",
+        "address": {
+            "address": "607 Fourth Street",
+            "city": "Jacksonville",
+            "state": "Colorado"
+        }
+        },
+        {
+        "id": 6,
+        "firstName": "Olivia",
+        "lastName": "Wilson",
+        "email": "olivia.wilson@x.dummyjson.com",
+        "phone": "+91 607-295-6448",
+        "gender": "female",
+        "role": "moderator",
+        "address": {
+            "address": "547 First Street",
+            "city": "Fort Worth",
+            "state": "Tennessee"
+        }
+        },
+        {
+        "id": 7,
+        "firstName": "Alexander",
+        "lastName": "Jones",
+        "email": "alexander.jones@x.dummyjson.com",
+        "phone": "+61 260-824-4986",
+        "gender": "male",
+        "role": "moderator",
+        "address": {
+            "address": "664 Maple Street",
+            "city": "Indianapolis",
+            "state": "Delaware"
+        }
+        },
+        {
+        "id": 8,
+        "firstName": "Ava",
+        "lastName": "Taylor",
+        "email": "ava.taylor@x.dummyjson.com",
+        "phone": "+1 458-853-7877",
+        "gender": "female",
+        "role": "moderator",
+        "address": {
+            "address": "1197 First Street",
+            "city": "Fort Worth",
+            "state": "Rhode Island"
+        }
+        },
+        {
+        "id": 9,
+        "firstName": "Ethan",
+        "lastName": "Martinez",
+        "email": "ethan.martinez@x.dummyjson.com",
+        "phone": "+92 933-608-5081",
+        "gender": "male",
+        "role": "moderator",
+        "address": {
+            "address": "466 Pine Street",
+            "city": "San Antonio",
+            "state": "Louisiana"
+        }
+        },
+        {
+        "id": 10,
+        "firstName": "Isabella",
+        "lastName": "Anderson",
+        "email": "isabella.anderson@x.dummyjson.com",
+        "phone": "+49 770-658-4885",
+        "gender": "female",
+        "role": "moderator",
+        "address": {
+            "address": "1964 Oak Street",
+            "city": "New York",
+            "state": "Utah"
+        }
+        },
+        {
+        "id": 11,
+        "firstName": "Liam",
+        "lastName": "Garcia",
+        "email": "liam.garcia@x.dummyjson.com",
+        "phone": "+92 870-217-6201",
+        "gender": "male",
+        "role": "moderator",
+        "address": {
+            "address": "576 Fifth Street",
+            "city": "Denver",
+            "state": "South Dakota"
+        }
+        },
+        {
+        "id": 12,
+        "firstName": "Mia",
+        "lastName": "Rodriguez",
+        "email": "mia.rodriguez@x.dummyjson.com",
+        "phone": "+49 989-461-8403",
+        "gender": "female",
+        "role": "moderator",
+        "address": {
+            "address": "1627 Sixth Street",
+            "city": "Jacksonville",
+            "state": "West Virginia"
+        }
+        },
+        {
+        "id": 13,
+        "firstName": "Noah",
+        "lastName": "Hernandez",
+        "email": "noah.hernandez@x.dummyjson.com",
+        "phone": "+49 393-605-6968",
+        "gender": "male",
+        "role": "moderator",
+        "address": {
+            "address": "1413 Maple Street",
+            "city": "New York",
+            "state": "North Dakota"
+        }
+        },
+        {
+        "id": 14,
+        "firstName": "Charlotte",
+        "lastName": "Lopez",
+        "email": "charlotte.lopez@x.dummyjson.com",
+        "phone": "+44 373-953-5028",
+        "gender": "female",
+        "role": "moderator",
+        "address": {
+            "address": "208 Second Street",
+            "city": "Columbus",
+            "state": "Ohio"
+        }
+        },
+        {
+        "id": 15,
+        "firstName": "William",
+        "lastName": "Gonzalez",
+        "email": "william.gonzalez@x.dummyjson.com",
+        "phone": "+81 905-252-7319",
+        "gender": "male",
+        "role": "moderator",
+        "address": {
+            "address": "31 Maple Street",
+            "city": "San Jose",
+            "state": "Utah"
+        }
+        },
+        {
+        "id": 16,
+        "firstName": "Avery",
+        "lastName": "Perez",
+        "email": "avery.perez@x.dummyjson.com",
+        "phone": "+61 731-431-3457",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "1125 First Street",
+            "city": "Columbus",
+            "state": "Iowa"
+        }
+        },
+        {
+        "id": 17,
+        "firstName": "Evelyn",
+        "lastName": "Sanchez",
+        "email": "evelyn.sanchez@x.dummyjson.com",
+        "phone": "+1 623-880-6871",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "1170 Lincoln Street",
+            "city": "San Diego",
+            "state": "Wyoming"
+        }
+        },
+        {
+        "id": 18,
+        "firstName": "Logan",
+        "lastName": "Torres",
+        "email": "logan.torres@x.dummyjson.com",
+        "phone": "+81 507-434-8733",
+        "gender": "male",
+        "role": "user",
+        "address": {
+            "address": "907 Seventh Street",
+            "city": "Columbus",
+            "state": "Arkansas"
+        }
+        },
+        {
+        "id": 19,
+        "firstName": "Abigail",
+        "lastName": "Rivera",
+        "email": "abigail.rivera@x.dummyjson.com",
+        "phone": "+91 228-363-7806",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "996 Oak Street",
+            "city": "Chicago",
+            "state": "New Mexico"
+        }
+        },
+        {
+        "id": 20,
+        "firstName": "Jackson",
+        "lastName": "Evans",
+        "email": "jackson.evans@x.dummyjson.com",
+        "phone": "+44 468-628-6686",
+        "gender": "male",
+        "role": "user",
+        "address": {
+            "address": "1873 Main Street",
+            "city": "New York",
+            "state": "Arkansas"
+        }
+        },
+        {
+        "id": 21,
+        "firstName": "Madison",
+        "lastName": "Collins",
+        "email": "madison.collins@x.dummyjson.com",
+        "phone": "+81 259-957-5711",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "1892 Lincoln Street",
+            "city": "Philadelphia",
+            "state": "New Jersey"
+        }
+        },
+        {
+        "id": 22,
+        "firstName": "Elijah",
+        "lastName": "Stewart",
+        "email": "elijah.stewart@x.dummyjson.com",
+        "phone": "+44 468-357-7872",
+        "gender": "male",
+        "role": "user",
+        "address": {
+            "address": "1701 Eighth Street",
+            "city": "Columbus",
+            "state": "Illinois"
+        }
+        },
+        {
+        "id": 23,
+        "firstName": "Chloe",
+        "lastName": "Morales",
+        "email": "chloe.morales@x.dummyjson.com",
+        "phone": "+92 468-541-7133",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "401 Fourth Street",
+            "city": "Dallas",
+            "state": "New Jersey"
+        }
+        },
+        {
+        "id": 24,
+        "firstName": "Mateo",
+        "lastName": "Nguyen",
+        "email": "mateo.nguyen@x.dummyjson.com",
+        "phone": "+1 341-597-6694",
+        "gender": "male",
+        "role": "user",
+        "address": {
+            "address": "1578 Fourth Street",
+            "city": "Columbus",
+            "state": "Missouri"
+        }
+        },
+        {
+        "id": 25,
+        "firstName": "Harper",
+        "lastName": "Kelly",
+        "email": "harper.kelly@x.dummyjson.com",
+        "phone": "+92 518-863-2863",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "1591 Adams Street",
+            "city": "Philadelphia",
+            "state": "New York"
+        }
+        },
+        {
+        "id": 26,
+        "firstName": "Evelyn",
+        "lastName": "Gonzalez",
+        "email": "evelyn.gonzalez@x.dummyjson.com",
+        "phone": "+61 708-508-4638",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "1065 Lincoln Street",
+            "city": "Dallas",
+            "state": "Maine"
+        }
+        },
+        {
+        "id": 27,
+        "firstName": "Daniel",
+        "lastName": "Cook",
+        "email": "daniel.cook@x.dummyjson.com",
+        "phone": "+44 254-761-6843",
+        "gender": "male",
+        "role": "user",
+        "address": {
+            "address": "1163 Pine Street",
+            "city": "Los Angeles",
+            "state": "Nevada"
+        }
+        },
+        {
+        "id": 28,
+        "firstName": "Lily",
+        "lastName": "Lee",
+        "email": "lily.lee@x.dummyjson.com",
+        "phone": "+1 808-757-9867",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "1946 Oak Street",
+            "city": "Phoenix",
+            "state": "Massachusetts"
+        }
+        },
+        {
+        "id": 29,
+        "firstName": "Henry",
+        "lastName": "Hill",
+        "email": "henry.hill@x.dummyjson.com",
+        "phone": "+1 240-833-4680",
+        "gender": "male",
+        "role": "user",
+        "address": {
+            "address": "1837 Maple Street",
+            "city": "Indianapolis",
+            "state": "Delaware"
+        }
+        },
+        {
+        "id": 30,
+        "firstName": "Addison",
+        "lastName": "Wright",
+        "email": "addison.wright@x.dummyjson.com",
+        "phone": "+1 514-384-3300",
+        "gender": "female",
+        "role": "user",
+        "address": {
+            "address": "568 Tenth Street",
+            "city": "San Francisco",
+            "state": "Montana"
+        }
+    }
+    ]
+}

@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'Barlow';
+    src: url('/bert-app/public/fonts/Barlow-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/bert-app/public/fonts/Poppins-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Poppins-ExtraBold';
+    src: url('/bert-app/public/fonts/Poppins-ExtraBold.ttf');
+}
+
+@font-face {
+    font-family: 'Jost-Bold';
+    src: url('../public/fonts/jost.bold.ttf');
+}
+
+@font-face {
+    font-family: 'Muli-Reguler';
+    src: url('../public/fonts/Muli-Reguler.ttf');
+}
+
+@theme {
+    /* Font */
+    --font-barlow: "Barlow", sans-serif;
+    --font-poppins: "Poppins", sans-serif;
+    --font-poppins-extrabold: "Poppins-ExtraBold", sans-serif;
+    --font-jost-bold: "Jost-Bold", sans-serif;
+    --font-muli-reguler: "Muli-Reguler", sans-serif;
+
+    /* Color */
+    --color-latar: #f3f4f6;
+    --color-teks: #374151; 
+    --color-teks-samping: #6b7280;
+    --color-garis: #e5e7eb; 
+    --color-hijau: #00B074; 
+    --color-merah: #ef4444; 
+    --color-biru: #3b82f6;
+    --color-kuning: #f59e0b; 
+}   
+
+body {
+    @apply font-barlow;
+}
