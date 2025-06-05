@@ -6,6 +6,8 @@ import React, { Suspense } from "react";
 import GuestLayout from "./layouts/GuestLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
+import Pelanggan from './pages/Pelanggan';
+import DetailPelanggan from './pages/DetailPelanggan';
 
 const DashboardAdmin = React.lazy(() => import("./pages/DashboardAdmin"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
@@ -35,7 +37,9 @@ function App() {
 
           <Route path="/contact" element={<Error404 />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} /> 
+          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/pelanggan" element={<Pelanggan />} /> 
+          <Route path="/pelanggan/:id" element={<DetailPelanggan />} />
           <Route path="*" element={<Error404 />} />
         </Route>
         {/* Guest Routes */}
