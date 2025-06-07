@@ -26,6 +26,8 @@ const UserList = React.lazy(() => import("./components/UserList"));
 const PesananButik = React.lazy(() => import("./pages/PesananButik"));
 const DetailPesananButik = React.lazy(() => import("./pages/DetailPesanan"));
 const LaporanPenjualan = React.lazy(() => import("./pages/LaporanPenjualan"));
+const FaqAdmin = React.lazy(() => import("./pages/FaqAdmin"));
+const Faq = React.lazy(() => import("./pages/Faq"));
 
 function App() {
   return (
@@ -41,9 +43,13 @@ function App() {
           <Route path="/pesanan-butik" element={<PesananButik />} />
           <Route path="/pesanan-butik/:id" element={<DetailPesananButik />} />
           <Route path="/laporan-penjualan" element={<LaporanPenjualan />} />
+          <Route path="/faq-admin" element={<FaqAdmin />} />
           <Route path="/contact" element={<Error404 />} />
           <Route path="*" element={<Error404 />} />
         </Route>
+
+        {/* FAQ User Route (tanpa sidebar admin) */}
+        <Route path="/faq" element={<Faq />} />
 
         {/* Guest Routes */}
         <Route element={<GuestLayout />}>

@@ -50,10 +50,10 @@ function Header() {
         {/* Navigation Menu */}
         <div className="hidden items-center w-full lg:flex lg:w-auto">
           <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 items-center">
-            {["Home", "About", "Food", "Testimonial", "Contact"].map((item) => (
+            {["Home", "About", "Food", "Testimonial", "Contact", "FAQ"].map((item) => (
               <li key={item}>
                 <a
-                  href="#"
+                  href={item === 'FAQ' ? '/faq' : '#'}
                   className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
                 >
                   {item}
