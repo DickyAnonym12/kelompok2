@@ -16,6 +16,7 @@ import {
     { name: 'Produk', icon: <Box />, path: '/products' },
     { name: 'Laporan Penjualan', icon: <BarChart2 />, path: '/laporan-penjualan' },
     { name: 'Pelanggan', icon: <Users />, path: '/pelanggan' },
+    { name: 'FAQ Admin', icon: <Settings />, path: '/faq-admin' },
     { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/pesanan-butik' },
   ]
   
