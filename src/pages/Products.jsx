@@ -13,14 +13,14 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`https://dummyjson.com/products/search?q=${query}`)
+      .get(`https://fakestoreapi.com/products${query ? `/category/${query}` : ''}`)
       .then((response) => {
         if (response.status !== 200) {
           setError(response.data.message);
           return;
         }
-        setProducts(response.data.products);
-        setError(null); // Reset error on successful fetch
+        setProducts(response.data);
+        setError(null);
       })
       .catch((err) => {
         setError(err.message || "An unknown error occurred");
@@ -28,55 +28,76 @@ export default function Products() {
   }, [query]);
 
   const errorInfo = error ? (
-    <div className="bg-red-200 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center">
+    <div className="bg-red-100 mb-5 p-5 text-sm font-light text-red-600 rounded-xl flex items-center">
       <BsFillExclamationDiamondFill className="text-red-600 me-2 text-lg" />
       {error}
     </div>
   ) : null;
 
   return (
-    <div>
+    <div className="p-6 space-y-6">
       <PageHeader title="Products" breadcrumb={breadcrumb} />
 
       {errorInfo}
 
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Cari produk..."
-        className="mb-4 p-3 w-full bg-white rounded-2xl shadow-lg"
-      />
+      <div className="bg-white rounded-xl shadow p-6">
+        <div className="flex gap-4 mb-6">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Cari produk..."
+            className="p-3 w-full bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          />
+          <select 
+            onChange={(e) => setQuery(e.target.value)}
+            className="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          >
+            <option value="">Semua Kategori</option>
+            <option value="men's clothing">Pakaian Pria</option>
+            <option value="women's clothing">Pakaian Wanita</option>
+            <option value="jewelery">Perhiasan</option>
+            <option value="electronics">Elektronik</option>
+          </select>
+        </div>
 
-      <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-2xl shadow-lg">
-        <thead>
-          <tr className="bg-emerald-600 text-white text-left text-sm font-semibold">
-            <th className="px-4 py-3">#</th>
-            <th className="px-4 py-3">Name</th>
-            <th className="px-4 py-3">Category</th>
-            <th className="px-4 py-3">Price</th>
-            <th className="px-4 py-3">Vendor</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
-          {products.map((item, index) => (
-            <tr key={item.id}>
-              <td className="px-6 py-4 font-medium text-gray-700">{index + 1}.</td>
-              <td className="px-6 py-4">
-                <Link
-                  to={`/products/${item.id}`}
-                  className="text-emerald-400 hover:text-emerald-500"
-                >
-                  {item.title}
-                </Link>
-              </td>
-              <td className="px-6 py-4">{item.category}</td>
-              <td className="px-6 py-4">Rp {item.price * 1000}</td>
-              <td className="px-6 py-4">{item.brand}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr className="bg-indigo-600 text-white text-left text-sm font-semibold">
+                <th className="px-6 py-4 rounded-l-xl">#</th>
+                <th className="px-6 py-4">Name</th>
+                <th className="px-6 py-4">Category</th>
+                <th className="px-6 py-4">Price</th>
+                <th className="px-6 py-4 rounded-r-xl">Rating</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
+              {products.map((item, index) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 font-medium text-gray-700">{index + 1}.</td>
+                  <td className="px-6 py-4">
+                    <Link
+                      to={`/products/${item.id}`}
+                      className="text-indigo-600 hover:text-indigo-700 font-medium"
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 capitalize">{item.category}</td>
+                  <td className="px-6 py-4 font-medium">Rp {(item.price * 15000).toLocaleString()}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center">
+                      <span className="text-yellow-500 mr-1">★</span>
+                      {item.rating.rate} ({item.rating.count})
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
