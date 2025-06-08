@@ -32,7 +32,7 @@ import {
     const isActive = (path) => location.pathname === path
   
     return (
-      <aside className="bg-white w-64 h-screen shadow-lg px-4 py-6 block">
+      <aside className="bg-white w-64 md:w-64 h-full md:h-screen shadow-lg px-4 py-6 block md:rounded-none rounded-r-2xl max-w-full overflow-y-auto">
         <div className="text-xl font-bold mb-8 text-purple-700">UMKM CRM</div>
         <nav className="space-y-1">
           {menuItems.map((item) => (

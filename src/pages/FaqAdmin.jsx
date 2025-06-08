@@ -73,41 +73,45 @@ export default function FaqAdmin() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="p-4 sm:p-6 space-y-6">
+      <div className="flex items-center justify-between mb-4 flex-col sm:flex-row gap-4 sm:gap-0">
         <h1 className="text-2xl font-bold text-indigo-700">Kelola FAQ</h1>
-        <button
-          onClick={openAddModal}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow"
-        >
-          + Tambah FAQ
-        </button>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <button
+            onClick={openAddModal}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow w-full sm:w-auto"
+          >
+            + Tambah FAQ
+          </button>
+        </div>
       </div>
-      <div className="bg-white rounded-xl shadow p-6">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead>
-            <tr className="bg-indigo-600 text-white text-left text-sm font-semibold">
-              <th className="px-6 py-4 rounded-l-xl">Pertanyaan</th>
-              <th className="px-6 py-4">Jawaban</th>
-              <th className="px-6 py-4 rounded-r-xl">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
-            {faq.map((item, idx) => (
-              <tr key={item.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 font-medium text-gray-700 w-1/3">{item.question}</td>
-                <td className="px-6 py-4 w-1/2">{item.answer}</td>
-                <td className="px-6 py-4 flex gap-2">
-                  <button onClick={() => openEditModal(idx)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
-                  <button onClick={() => handleDelete(idx)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
-                </td>
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr className="bg-indigo-600 text-white text-left text-sm font-semibold">
+                <th className="px-6 py-4 rounded-l-xl">Pertanyaan</th>
+                <th className="px-6 py-4">Jawaban</th>
+                <th className="px-6 py-4 rounded-r-xl">Aksi</th>
               </tr>
-            ))}
-            {faq.length === 0 && (
-              <tr><td colSpan={3} className="text-center py-6 text-gray-400">Belum ada FAQ</td></tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
+              {faq.map((item, idx) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 font-medium text-gray-700 w-1/3">{item.question}</td>
+                  <td className="px-6 py-4 w-1/2">{item.answer}</td>
+                  <td className="px-6 py-4 flex gap-2">
+                    <button onClick={() => openEditModal(idx)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+                    <button onClick={() => handleDelete(idx)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
+                  </td>
+                </tr>
+              ))}
+              {faq.length === 0 && (
+                <tr><td colSpan={3} className="text-center py-6 text-gray-400">Belum ada FAQ</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal Tambah/Edit FAQ */}

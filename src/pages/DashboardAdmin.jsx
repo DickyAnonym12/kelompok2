@@ -48,6 +48,7 @@ const Dashboard = () => {
 
   const barOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
       title: { display: true, text: 'Penjualan Bulanan Tahun Ini' },
@@ -72,6 +73,7 @@ const Dashboard = () => {
 
   const lineOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
       title: { display: true, text: 'Pertumbuhan Pelanggan Tahun Ini' },
@@ -93,13 +95,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-8">
       {/* Statistik utama */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map(({ label, value, percent, color }) => (
-          <div key={label} className="bg-white rounded-xl shadow p-5">
+          <div key={label} className="bg-white rounded-xl shadow p-4 sm:p-5">
             <p className="text-sm text-gray-500">{label}</p>
-            <h2 className={`text-2xl font-bold ${colorMap[color]} flex items-center gap-2`}>
+            <h2 className={`text-xl sm:text-2xl font-bold ${colorMap[color]} flex items-center gap-2`}>
               {value}
               <span className={`text-xs font-semibold ${percentColorMap[color]}`}>{percent}</span>
             </h2>
@@ -108,12 +110,12 @@ const Dashboard = () => {
       </div>
 
       {/* Grafik Penjualan Bulanan */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6 h-[300px] sm:h-[400px]">
         <Bar options={barOptions} data={barData} />
       </div>
 
       {/* Grafik Pertumbuhan Pelanggan */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6 h-[300px] sm:h-[400px]">
         <Line options={lineOptions} data={lineData} />
       </div>
     </div>
