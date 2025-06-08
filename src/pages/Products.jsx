@@ -7,13 +7,18 @@ import { Link } from "react-router-dom";
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState(""); // untuk filter kategori
+  const [searchTerm, setSearchTerm] = useState(""); // untuk cari nama produk
 
   const breadcrumb = ["Products", "Product List"];
 
   useEffect(() => {
+    const url = category
+      ? `https://fakestoreapi.com/products/category/${category}`
+      : `https://fakestoreapi.com/products`;
+
     axios
-      .get(`https://fakestoreapi.com/products${query ? `/category/${query}` : ''}`)
+      .get(url)
       .then((response) => {
         if (response.status !== 200) {
           setError(response.data.message);
@@ -25,7 +30,12 @@ export default function Products() {
       .catch((err) => {
         setError(err.message || "An unknown error occurred");
       });
-  }, [query]);
+  }, [category]);
+
+  // Filter berdasarkan searchTerm di frontend
+  const filteredProducts = products.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const errorInfo = error ? (
     <div className="bg-red-100 mb-5 p-5 text-sm font-light text-red-600 rounded-xl flex items-center">
@@ -44,13 +54,13 @@ export default function Products() {
         <div className="flex gap-4 mb-6">
           <input
             type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cari produk..."
             className="p-3 w-full bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           />
-          <select 
-            onChange={(e) => setQuery(e.target.value)}
+          <select
+            onChange={(e) => setCategory(e.target.value)}
             className="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           >
             <option value="">Semua Kategori</option>
@@ -73,9 +83,11 @@ export default function Products() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
-              {products.map((item, index) => (
+              {filteredProducts.map((item, index) => (
                 <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-700">{index + 1}.</td>
+                  <td className="px-6 py-4 font-medium text-gray-700">
+                    {index + 1}.
+                  </td>
                   <td className="px-6 py-4">
                     <Link
                       to={`/products/${item.id}`}
@@ -85,7 +97,9 @@ export default function Products() {
                     </Link>
                   </td>
                   <td className="px-6 py-4 capitalize">{item.category}</td>
-                  <td className="px-6 py-4 font-medium">Rp {(item.price * 15000).toLocaleString()}</td>
+                  <td className="px-6 py-4 font-medium">
+                    Rp {(item.price * 15000).toLocaleString()}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       <span className="text-yellow-500 mr-1">★</span>
@@ -94,6 +108,13 @@ export default function Products() {
                   </td>
                 </tr>
               ))}
+              {filteredProducts.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="text-center py-6 text-gray-500">
+                    Tidak ada produk ditemukan.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
