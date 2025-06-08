@@ -45,13 +45,13 @@ export default function Products() {
   ) : null;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       <PageHeader title="Products" breadcrumb={breadcrumb} />
 
       {errorInfo}
 
-      <div className="bg-white rounded-xl shadow p-6">
-        <div className="flex gap-4 mb-6">
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <input
             type="text"
             value={searchTerm}

@@ -131,10 +131,10 @@ export default function LaporanPenjualan() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="p-4 sm:p-6 space-y-6">
+      <div className="flex items-center justify-between mb-4 flex-col sm:flex-row gap-4 sm:gap-0">
         <h1 className="text-2xl font-bold text-indigo-700">Laporan Penjualan</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={openAddModal}
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow"
@@ -149,8 +149,8 @@ export default function LaporanPenjualan() {
           </button>
         </div>
       </div>
-      <div className="bg-white rounded-xl shadow p-6">
-        <div className="mb-4 flex items-center gap-4">
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <div className="mb-4 flex items-center gap-4 flex-col sm:flex-row">
           <span className="text-gray-500 text-sm">Grand Total: </span>
           <span className="text-lg font-bold text-indigo-700">Rp {sumTotal.toLocaleString()}</span>
         </div>

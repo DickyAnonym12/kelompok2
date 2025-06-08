@@ -15,9 +15,9 @@ const statusColor = {
 
 const PesananButik = () => {
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <h1 className="text-2xl font-bold text-fuchsia-700 mb-6">Daftar Pesanan Butik</h1>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="bg-white shadow-md rounded-lg overflow-x-auto">
         <table className="min-w-full table-auto text-sm">
           <thead className="bg-fuchsia-100 text-fuchsia-800 font-semibold">
             <tr>

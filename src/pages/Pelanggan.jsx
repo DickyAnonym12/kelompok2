@@ -7,35 +7,37 @@ const Pelanggan = () => {
   ];
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <h1 className="text-2xl font-semibold mb-4">Daftar Pelanggan</h1>
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr>
-            <th className="border px-4 py-2">ID</th>
-            <th className="border px-4 py-2">Nama</th>
-            <th className="border px-4 py-2">Email</th>
-            <th className="border px-4 py-2">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td className="border px-4 py-2">{item.id}</td>
-              <td className="border px-4 py-2">{item.nama}</td>
-              <td className="border px-4 py-2">{item.email}</td>
-              <td className="border px-4 py-2">
-                <Link
-                  to={`/pelanggan/${item.id}`}
-                  className="text-blue-500 hover:underline"
-                >
-                  Detail
-                </Link>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th className="border px-4 py-2">ID</th>
+              <th className="border px-4 py-2">Nama</th>
+              <th className="border px-4 py-2">Email</th>
+              <th className="border px-4 py-2">Aksi</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <tr key={item.id}>
+                <td className="border px-4 py-2">{item.id}</td>
+                <td className="border px-4 py-2">{item.nama}</td>
+                <td className="border px-4 py-2">{item.email}</td>
+                <td className="border px-4 py-2">
+                  <Link
+                    to={`/pelanggan/${item.id}`}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Detail
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
