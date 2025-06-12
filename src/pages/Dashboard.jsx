@@ -5,6 +5,7 @@ import ProductCard from "../components/ProductCard";
 import TestimonialCard from "../components/TestimonialCard";
 import testimonials from "../assets/testimonials.json";
 import HeaderUtama from "../components/HeaderUtama.jsx";
+import Newsletter from '../components/Newsletter';
 
 export default function Dashboard() {
   return (
@@ -30,6 +31,8 @@ export default function Dashboard() {
                 </div>
             </div>
         </div>
+
+        <Newsletter />
     </div>
   );
 }
