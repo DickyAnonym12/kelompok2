@@ -18,6 +18,7 @@ import {
     { name: 'Pelanggan', icon: <Users />, path: '/pelanggan' },
     { name: 'FAQ Admin', icon: <Settings />, path: '/faq-admin' },
     { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/pesanan-butik' },
+    { name: 'Newsletter', icon: <BarChart2 />, path: '/newsletter-admin' },
   ]
   
   const accountItems = [

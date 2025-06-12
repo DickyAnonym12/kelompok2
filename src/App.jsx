@@ -28,6 +28,10 @@ const DetailPesananButik = React.lazy(() => import("./pages/DetailPesanan"));
 const LaporanPenjualan = React.lazy(() => import("./pages/LaporanPenjualan"));
 const FaqAdmin = React.lazy(() => import("./pages/FaqAdmin"));
 const Faq = React.lazy(() => import("./pages/Faq"));
+const NewsletterAdmin = React.lazy(() => import("./pages/NewsletterAdmin"));
+const NewsletterCampaigns = React.lazy(() => import("./pages/NewsletterCampaigns"));
+import { AddCampaignForm } from "./pages/NewsletterCampaigns";
+import EditCampaignForm from './pages/EditCampaignForm';
 
 function App() {
   return (
@@ -44,6 +48,10 @@ function App() {
           <Route path="/pesanan-butik/:id" element={<DetailPesananButik />} />
           <Route path="/laporan-penjualan" element={<LaporanPenjualan />} />
           <Route path="/faq-admin" element={<FaqAdmin />} />
+          <Route path="/newsletter-admin" element={<NewsletterAdmin />} />
+          <Route path="/newsletter-campaigns" element={<NewsletterCampaigns />} />
+          <Route path="/newsletter-campaigns/add" element={<AddCampaignForm />} />
+          <Route path="/newsletter-campaigns/:id/edit" element={<EditCampaignForm />} />
           <Route path="/contact" element={<Error404 />} />
           <Route path="*" element={<Error404 />} />
         </Route>
