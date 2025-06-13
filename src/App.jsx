@@ -23,6 +23,7 @@ const OrderList = React.lazy(() => import("./components/OrderList"));
 const UserList = React.lazy(() => import("./components/UserList"));
 const PesananButik = React.lazy(() => import("./pages/PesananButik"));
 const DetailPesananButik = React.lazy(() => import("./pages/DetailPesanan"));
+const Membership = React.lazy(() => import("./pages/MemberShip"));
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/pesanan-butik" element={<PesananButik />} />
           <Route path="/pesanan-butik/:id" element={<DetailPesananButik />} />
+          <Route path="/membership" element={<Membership />} />
           <Route path="/contact" element={<Error404 />} />
           <Route path="*" element={<Error404 />} />
         </Route>
