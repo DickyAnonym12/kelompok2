@@ -1,3 +1,4 @@
+import { MdOutlineWorkspacePremium } from "react-icons/md"; 
 import {
     LayoutDashboard,
     Users,         // untuk pelanggan
@@ -19,6 +20,7 @@ import {
     { name: 'FAQ Admin', icon: <Settings />, path: '/faq-admin' },
     { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/pesanan-butik' },
     { name: 'Newsletter', icon: <BarChart2 />, path: '/newsletter-admin' },
+    { name: 'Member Ship', icon: <MdOutlineWorkspacePremium />, path: '/membership' },
   ]
   
   const accountItems = [

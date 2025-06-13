@@ -32,7 +32,7 @@ const NewsletterAdmin = React.lazy(() => import("./pages/NewsletterAdmin"));
 const NewsletterCampaigns = React.lazy(() => import("./pages/NewsletterCampaigns"));
 import { AddCampaignForm } from "./pages/NewsletterCampaigns";
 import EditCampaignForm from './pages/EditCampaignForm';
-
+const Membership = React.lazy(() => import("./pages/MemberShip"));
 function App() {
   return (
     <Suspense fallback={<Loading />}>
@@ -53,6 +53,7 @@ function App() {
           <Route path="/newsletter-campaigns/add" element={<AddCampaignForm />} />
           <Route path="/newsletter-campaigns/:id/edit" element={<EditCampaignForm />} />
           <Route path="/contact" element={<Error404 />} />
+          <Route path="/membership" element={<Membership />} />
           <Route path="*" element={<Error404 />} />
         </Route>
 
