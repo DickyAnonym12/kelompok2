@@ -1,67 +1,71 @@
 export default function Register() {
     return (
-        <div>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-                Create Your Account ✨
-            </h2>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-blue-100">
+            <div className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md">
+                <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+                    ✨ Create Your Account
+                </h2>
 
-            <form>
-                <div className="mb-5">
-                    <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                <form>
+                    <div className="mb-6">
+                        <label htmlFor="email" className="block text-sm font-semibold text-gray-600 mb-2">
+                            Email Address
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="email"
+                                id="email"
+                                className="w-full px-12 py-3 bg-gray-50 border border-gray-300 rounded-2xl shadow-inner focus:ring-2 focus:ring-blue-300 focus:outline-none transition"
+                                placeholder="you@example.com"
+                            />
+                            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                📧
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mb-6">
+                        <label htmlFor="password" className="block text-sm font-semibold text-gray-600 mb-2">
+                            Password
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="password"
+                                id="password"
+                                className="w-full px-12 py-3 bg-gray-50 border border-gray-300 rounded-2xl shadow-inner focus:ring-2 focus:ring-blue-300 focus:outline-none transition"
+                                placeholder="********"
+                            />
+                            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                🔒
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mb-8">
+                        <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600 mb-2">
+                            Confirm Password
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                className="w-full px-12 py-3 bg-gray-50 border border-gray-300 rounded-2xl shadow-inner focus:ring-2 focus:ring-blue-300 focus:outline-none transition"
+                                placeholder="********"
+                            />
+                            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                🔒
+                            </span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-pink-400 to-blue-400 hover:from-pink-500 hover:to-blue-500 text-white font-semibold py-3 rounded-2xl shadow-lg transition-all duration-300"
                     >
-                        Email Address
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="you@example.com"
-                    />
-                </div>
-
-                <div className="mb-5">
-                    <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="********"
-                    />
-                </div>
-
-                <div className="mb-6">
-                    <label
-                        htmlFor="confirmPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                        Confirm Password
-                    </label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="********"
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4
-                        rounded-lg transition duration-300"
-                >
-                    Register
-                </button>
-            </form>
+                        🚀 Register
+                    </button>
+                </form>
+            </div>
         </div>
-    )
+    );
 }
