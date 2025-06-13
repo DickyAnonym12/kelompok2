@@ -1,10 +1,11 @@
 [
   {
-    "id": 1749747536460,
-    "title": "Selamat Datang",
-    "content": "<p>Halo selamat datang</p>",
-    "lastSent": "2025-06-12T17:43:33.767Z",
+    "id": 1749773961828,
+    "title": "Halo",
+    "content": "<p>Haloha</p>",
     "status": "stopped",
+    "createdAt": "2025-06-13T00:19:21.828Z",
+    "lastSent": "2025-06-13T00:41:34.016Z",
     "users": [
       "dicky.wijayaa01@gmail.com"
     ]

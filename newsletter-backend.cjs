@@ -7,6 +7,7 @@
 //    EMAIL_PASS=your_gmail_app_password
 // 3. Jalankan: node newsletter-backend.js
 
+// Newsletter Backend - Express + Nodemailer + node-cron (tanpa database)
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
@@ -35,7 +36,9 @@ const transporter = nodemailer.createTransport({
   auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
 });
 
-// API endpoints
+// === API ===
+
+// Tambah subscriber
 app.post('/api/subscriber', (req, res) => {
   const { email } = req.body;
   let subs = loadJson(SUBSCRIBERS_FILE);
@@ -45,10 +48,12 @@ app.post('/api/subscriber', (req, res) => {
   res.status(201).json({ email });
 });
 
+// Ambil semua subscriber
 app.get('/api/subscriber', (req, res) => {
   res.json(loadJson(SUBSCRIBERS_FILE));
 });
 
+// Hapus subscriber
 app.delete('/api/subscriber/:email', (req, res) => {
   let subs = loadJson(SUBSCRIBERS_FILE);
   subs = subs.filter(s => s.email !== req.params.email);
@@ -56,6 +61,7 @@ app.delete('/api/subscriber/:email', (req, res) => {
   res.json({ success: true });
 });
 
+// Tambah campaign newsletter
 app.post('/api/newsletter', (req, res) => {
   const { title, content, schedule } = req.body;
   let nls = loadJson(NEWSLETTERS_FILE);
@@ -74,10 +80,20 @@ app.post('/api/newsletter', (req, res) => {
   res.status(201).json(nl);
 });
 
+// Ambil semua campaign
 app.get('/api/newsletter', (req, res) => {
   res.json(loadJson(NEWSLETTERS_FILE));
 });
 
+// ✅ Ambil 1 campaign by ID
+app.get('/api/newsletter/:id', (req, res) => {
+  const newsletters = loadJson(NEWSLETTERS_FILE);
+  const newsletter = newsletters.find(nl => nl.id == req.params.id);
+  if (!newsletter) return res.status(404).json({ error: 'Not found' });
+  res.json(newsletter);
+});
+
+// Update campaign (status, user, dll)
 app.put('/api/newsletter/:id', (req, res) => {
   let nls = loadJson(NEWSLETTERS_FILE);
   const idx = nls.findIndex(nl => nl.id == req.params.id);
@@ -87,6 +103,7 @@ app.put('/api/newsletter/:id', (req, res) => {
   res.json(nls[idx]);
 });
 
+// Hapus campaign
 app.delete('/api/newsletter/:id', (req, res) => {
   let nls = loadJson(NEWSLETTERS_FILE);
   nls = nls.filter(nl => nl.id != req.params.id);
@@ -94,7 +111,7 @@ app.delete('/api/newsletter/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// Update status campaign
+// Update status campaign saja
 app.put('/api/newsletter/:id/status', (req, res) => {
   let nls = loadJson(NEWSLETTERS_FILE);
   const idx = nls.findIndex(nl => nl.id == req.params.id);
@@ -104,7 +121,7 @@ app.put('/api/newsletter/:id/status', (req, res) => {
   res.json(nls[idx]);
 });
 
-// Kirim campaign ke email subscriber terpilih
+// Kirim campaign ke email terpilih
 app.post('/api/newsletter/:id/send', (req, res) => {
   let nls = loadJson(NEWSLETTERS_FILE);
   const idx = nls.findIndex(nl => nl.id == req.params.id);
@@ -131,7 +148,7 @@ app.post('/api/newsletter/:id/send', (req, res) => {
   });
 });
 
-// Kirim newsletter ke semua subscriber
+// === Kirim otomatis (via cron) ===
 function sendNewsletter(newsletter) {
   const subs = loadJson(SUBSCRIBERS_FILE);
   if (subs.length === 0) return;
@@ -155,16 +172,18 @@ function sendNewsletter(newsletter) {
   });
 }
 
-// Jadwalkan pengiriman otomatis
 function setupCronJob(newsletter) {
   if (newsletter.schedule) {
-    cron.schedule(newsletter.schedule, () => sendNewsletter(newsletter), { timezone: 'Asia/Jakarta' });
+    cron.schedule(newsletter.schedule, () => sendNewsletter(newsletter), {
+      timezone: 'Asia/Jakarta'
+    });
   }
 }
 
-// Setup cron untuk semua newsletter saat server start
+// Setup cron saat server start
 loadJson(NEWSLETTERS_FILE).forEach(setupCronJob);
 
+// Jalankan server
 app.listen(5000, () => {
-  console.log('Newsletter backend running on http://localhost:5000');
+  console.log('✅ Newsletter backend running on http://localhost:5000');
 });
