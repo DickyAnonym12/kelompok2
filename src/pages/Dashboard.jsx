@@ -17,7 +17,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen">
         <div id="home">
           <HeaderUtama />
           <Banner />
