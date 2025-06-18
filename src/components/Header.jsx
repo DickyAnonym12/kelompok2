@@ -1,8 +1,13 @@
 import React from "react";
-import { FaShoppingCart, FaSearch, FaEnvelope } from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import sedap from "../assets/Sedap.png";
 
 function Header() {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -13,8 +18,13 @@ function Header() {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
-    <nav className="bg-gradient-to-br from-orange-50 px-4 lg:px-6 py-4 shadow-lg">
+    <nav className="bg-gradient-to-br from-orange-50 px-4 lg:px-6 py-4 fixed top-0 left-0 right-0 z-50 shadow-lg">
       <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
         {/* Logo */}
         <a href="#" className="flex items-center space-x-2" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>
@@ -54,20 +64,11 @@ function Header() {
 
         {/* Right Icons & Auth */}
         <div className="flex items-center space-x-4">
-          {/* Login & Register */}
+          {/* User Info */}
           <div className="hidden lg:flex items-center space-x-4">
-            <a
-              href="/login"
-              className="text-[16px] text-[#2E2E3A] hover:text-orange-500 transition"
-            >
-              Login
-            </a>
-            <a
-              href="/register"
-              className="text-[16px] text-white bg-red-500 py-2 px-4 rounded-xl hover:bg-red-600 transition"
-            >
-              Register
-            </a>
+            <span className="text-sm text-gray-600">
+              Hi, {user?.email?.split('@')[0] || 'User'}
+            </span>
           </div>
 
           {/* Newsletter Button */}
@@ -93,6 +94,15 @@ function Header() {
               2
             </span>
           </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition"
+          >
+            <FaSignOutAlt className="text-sm" />
+            <span className="text-sm font-medium">Logout</span>
+          </button>
         </div>
       </div>
     </nav>
