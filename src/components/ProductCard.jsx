@@ -1,122 +1,91 @@
 import React, { useState } from "react";
-import nasigoreng from "../assets/produk/nasigoreng.jpg";
-import miegoreng from "../assets/produk/miegoreng.jpg";
-import bakso from "../assets/produk/bakso.jpeg";
-import sate from "../assets/produk/sate.jpeg";
-import soto from "../assets/produk/soto.jpg";
-import ayambakarmadu from "../assets/produk/ayambakarmadu.jpeg";
-import bakmi from "../assets/produk/bakmi.jpg";
-import mieyamin from "../assets/produk/mie-yamin.jpg";
-import nasiuduk from "../assets/produk/nasiuduk.jpg";
-import gadogado from "../assets/produk/gadogado.jpg";
-import esjeruk from "../assets/produk/esjeruk.jpg";
-import esteh from "../assets/produk/esteh.jpeg";
+import liviadress from "../assets/produk/gambar1.png";
+import feronicadress from "../assets/produk/gambar2.png";
+import catalinaset from "../assets/produk/gambar3.png";
+import shainasetcream from "../assets/produk/gambar4.png";
+import shaairasetblue from "../assets/produk/gambar5.png";
+import yazrinsetwhite from "../assets/produk/gambar6.png";
+import emilybagsilver from "../assets/produk/gambar7.png";
+import angelbag from "../assets/produk/gambar8.png";
+import ladytotebagsoftpink from "../assets/produk/gambar9.png";
 
 const productImages = {
-  "nasigoreng.jpg": nasigoreng,
-  "miegoreng.jpg": miegoreng,
-  "bakso.jpeg": bakso,
-  "sate.jpeg": sate,
-  "soto.jpg": soto,
-  "ayambakarmadu.jpeg": ayambakarmadu,
-  "bakmi.jpg": bakmi,
-  "mie-yamin.jpg": mieyamin,
-  "nasiuduk.jpg": nasiuduk,
-  "gadogado.jpg": gadogado,
-  "esjeruk.jpg": esjeruk,
-  "esteh.jpeg": esteh,
+  "gambar1.png": liviadress,
+  "gambar2.png": feronicadress,
+  "gambar3.png": catalinaset,
+  "gambar4.png": shainasetcream,
+  "gambar5.png": shaairasetblue,
+  "gambar6.png": yazrinsetwhite,
+  "gambar7.png": emilybagsilver,
+  "gambar8.png": angelbag,
+  "gambar9.png": ladytotebagsoftpink,
 };
 
-// Pisahkan produk makanan dan minuman
-const foods = [
+// Data produk fashion
+const products = [
   {
-    nama_produk: "Nasi Goreng",
-    kode_produk: "NSG01",
-    harga: 15000,
+    nama_produk: "Livia Dress",
+    kode_produk: "LD01",
+    harga: 4200000,
     stok: 10,
-    image: "nasigoreng.jpg",
+    image: "gambar1.png",
   },
   {
-    nama_produk: "Mie Goreng",
-    kode_produk: "MGR02",
-    harga: 12000,
+    nama_produk: "Feronica Dress",
+    kode_produk: "FD02",
+    harga: 3900000,
     stok: 0,
-    image: "miegoreng.jpg",
+    image: "gambar2.png",
   },
   {
-    nama_produk: "Bakso",
-    kode_produk: "BKS03",
-    harga: 17000,
+    nama_produk: "Catalina Set",
+    kode_produk: "CS03",
+    harga: 4000000,
     stok: 5,
-    image: "bakso.jpeg",
+    image: "gambar3.png",
   },
   {
-    nama_produk: "Sate Ayam",
-    kode_produk: "STA04",
-    harga: 20000,
+    nama_produk: "Shaina Set Cream",
+    kode_produk: "SSCA04",
+    harga: 4000000,
     stok: 3,
-    image: "sate.jpeg",
+    image: "gambar4.png",
   },
   {
-    nama_produk: "Soto Ayam",
-    kode_produk: "STO05",
-    harga: 16000,
+    nama_produk: "Shaira Set Blue",
+    kode_produk: "SSTO05",
+    harga: 4000000,
     stok: 8,
-    image: "soto.jpg",
+    image: "gambar5.png",
   },
   {
-    nama_produk: "Ayam Bakar Madu",
-    kode_produk: "ABMO06",
-    harga: 20000,
+    nama_produk: "Yazrin Set White",
+    kode_produk: "YSW06",
+    harga: 4000000,
     stok: 8,
-    image: "ayambakarmadu.jpeg",
+    image: "gambar6.png",
   },
   {
-    nama_produk: "Bakmi Ayam",
-    kode_produk: "BAO07",
-    harga: 17000,
+    nama_produk: "Emily Bag Silver",
+    kode_produk: "EBS07",
+    harga: 1500000,
     stok: 8,
-    image: "bakmi.jpg",
+    image: "gambar7.png",
   },
   {
-    nama_produk: "Mie Yamin",
-    kode_produk: "MYO08",
-    harga: 18000,
+    nama_produk: "Angle Bag",
+    kode_produk: "AB08",
+    harga: 1500000,
     stok: 8,
-    image: "mie-yamin.jpg",
+    image: "gambar8.png",
   },
   {
-    nama_produk: "Nasi Uduk",
-    kode_produk: "NDU09",
-    harga: 14000,
+    nama_produk: "Lady Totebag Soft Pink",
+    kode_produk: "LTSP09",
+    harga: 1499000,
     stok: 6,
-    image: "nasiuduk.jpg",
+    image: "gambar9.png",
   },
-  {
-    nama_produk: "Gado-Gado",
-    kode_produk: "GDO10",
-    harga: 13000,
-    stok: 4,
-    image: "gadogado.jpg",
-  },
-];
-
-const drinks = [
-  {
-    nama_produk: "Es Teh Manis",
-    kode_produk: "ETM11",
-    harga: 5000,
-    stok: 20,
-    image: "esteh.jpeg",
-  },
-  {
-    nama_produk: "Es Jeruk",
-    kode_produk: "EJR12",
-    harga: 7000,
-    stok: 15,
-    image: "esjeruk.jpg",
-  },
-  // Bisa tambah minuman lain di sini
 ];
 
 function ProductCard({ produk }) {
@@ -136,7 +105,7 @@ function ProductCard({ produk }) {
         <p className="text-sm text-gray-600 mb-2">{produk.kode_produk}</p>
         <p className="text-2xl text-red-600 font-extrabold mb-1">
           Rp{produk.harga.toLocaleString("id-ID")}{" "}
-          <span className="text-base text-gray-500 font-normal">/porsi</span>
+          <span className="text-base text-gray-500 font-normal">/item</span>
         </p>
         <p className="text-sm text-gray-400 mb-5">Stok: {produk.stok}</p>
 
@@ -167,19 +136,10 @@ function ProductCard({ produk }) {
 
 export default function ProductList() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [visibleFoodCount, setVisibleFoodCount] = useState(5);
-  const [visibleDrinkCount, setVisibleDrinkCount] = useState(3);
+  const [visibleProductCount, setVisibleProductCount] = useState(6);
 
-  // Filter makanan dan minuman berdasarkan search term
-  const filteredFoods = foods.filter((produk) => {
-    const term = searchTerm.toLowerCase();
-    return (
-      produk.kode_produk.toLowerCase().includes(term) ||
-      produk.nama_produk.toLowerCase().includes(term)
-    );
-  });
-
-  const filteredDrinks = drinks.filter((produk) => {
+  // Filter produk berdasarkan search term
+  const filteredProducts = products.filter((produk) => {
     const term = searchTerm.toLowerCase();
     return (
       produk.kode_produk.toLowerCase().includes(term) ||
@@ -188,22 +148,16 @@ export default function ProductList() {
   });
 
   // Produk yang tampil sesuai visibleCount
-  const visibleFoods = filteredFoods.slice(0, visibleFoodCount);
-  const visibleDrinks = filteredDrinks.slice(0, visibleDrinkCount);
+  const visibleProducts = filteredProducts.slice(0, visibleProductCount);
 
-  // Fungsi show more untuk makanan dan minuman
-  const handleShowMoreFoods = () => {
-    setVisibleFoodCount((prev) => prev + 5);
-  };
-
-  const handleShowMoreDrinks = () => {
-    setVisibleDrinkCount((prev) => prev + 3);
+  // Fungsi show more untuk produk
+  const handleShowMoreProducts = () => {
+    setVisibleProductCount((prev) => prev + 6);
   };
 
   // Reset visible count saat search term berubah
   React.useEffect(() => {
-    setVisibleFoodCount(5);
-    setVisibleDrinkCount(3);
+    setVisibleProductCount(6);
   }, [searchTerm]);
 
   return (
@@ -218,49 +172,25 @@ export default function ProductList() {
         />
       </div>
 
-      {/* Section Makanan */}
+      {/* Section Produk Fashion */}
       <section className="mb-12">
-        <h2 className="text-3xl font-bold mb-6 text-center">Makanan</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center">Produk Fashion</h2>
         <div className="flex flex-wrap gap-6 justify-center">
-          {visibleFoods.length > 0 ? (
-            visibleFoods.map((produk) => (
+          {visibleProducts.length > 0 ? (
+            visibleProducts.map((produk) => (
               <ProductCard key={produk.kode_produk} produk={produk} />
             ))
           ) : (
-            <p className="text-gray-500">Produk makanan tidak ditemukan.</p>
+            <p className="text-gray-500">Produk tidak ditemukan.</p>
           )}
         </div>
-        {visibleFoodCount < filteredFoods.length && (
+        {visibleProductCount < filteredProducts.length && (
           <div className="flex justify-center mt-8">
             <button
-              onClick={handleShowMoreFoods}
+              onClick={handleShowMoreProducts}
               className="bg-orange-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-orange-600 transition duration-300 font-semibold"
             >
-              Tampilkan Lebih Banyak Makanan
-            </button>
-          </div>
-        )}
-      </section>
-
-      {/* Section Minuman */}
-      <section>
-        <h2 className="text-3xl font-bold mb-6 text-center">Minuman</h2>
-        <div className="flex flex-wrap gap-6 justify-center">
-          {visibleDrinks.length > 0 ? (
-            visibleDrinks.map((produk) => (
-              <ProductCard key={produk.kode_produk} produk={produk} />
-            ))
-          ) : (
-            <p className="text-gray-500">Produk minuman tidak ditemukan.</p>
-          )}
-        </div>
-        {visibleDrinkCount < filteredDrinks.length && (
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={handleShowMoreDrinks}
-              className="bg-orange-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-orange-600 transition duration-300 font-semibold"
-            >
-              Tampilkan Lebih Banyak Minuman
+              Tampilkan Lebih Banyak Produk
             </button>
           </div>
         )}

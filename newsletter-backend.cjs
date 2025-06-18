@@ -7,7 +7,6 @@
 //    EMAIL_PASS=your_gmail_app_password
 // 3. Jalankan: node newsletter-backend.js
 
-// Newsletter Backend - Express + Nodemailer + node-cron (tanpa database)
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
@@ -24,17 +23,60 @@ const NEWSLETTERS_FILE = './newsletters.json';
 
 // Helper: load & save JSON
 function loadJson(file, fallback = []) {
-  try { return JSON.parse(fs.readFileSync(file)); } catch { return fallback; }
+  try {
+    return JSON.parse(fs.readFileSync(file));
+  } catch {
+    return fallback;
+  }
 }
 function saveJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-// Nodemailer setup
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-});
+// Check email configuration
+function checkEmailConfig() {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('❌ Email configuration missing!');
+    console.error('EMAIL_USER=your_gmail@gmail.com');
+    console.error('EMAIL_PASS=your_gmail_app_password');
+    return false;
+  }
+  return true;
+}
+
+// Nodemailer setup (FIXED)
+let transporter;
+function setupTransporter() {
+  if (!checkEmailConfig()) return null;
+
+  try {
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      secure: true,
+      port: 465,
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    transporter.verify((error, success) => {
+      if (error) {
+        console.error('❌ Email configuration error:', error.message);
+      } else {
+        console.log('✅ Email server is ready to send messages');
+      }
+    });
+
+    return transporter;
+  } catch (error) {
+    console.error('❌ Failed to setup email transporter:', error.message);
+    return null;
+  }
+}
 
 // === API ===
 
@@ -85,7 +127,7 @@ app.get('/api/newsletter', (req, res) => {
   res.json(loadJson(NEWSLETTERS_FILE));
 });
 
-// ✅ Ambil 1 campaign by ID
+// Ambil 1 campaign
 app.get('/api/newsletter/:id', (req, res) => {
   const newsletters = loadJson(NEWSLETTERS_FILE);
   const newsletter = newsletters.find(nl => nl.id == req.params.id);
@@ -93,7 +135,7 @@ app.get('/api/newsletter/:id', (req, res) => {
   res.json(newsletter);
 });
 
-// Update campaign (status, user, dll)
+// Update campaign
 app.put('/api/newsletter/:id', (req, res) => {
   let nls = loadJson(NEWSLETTERS_FILE);
   const idx = nls.findIndex(nl => nl.id == req.params.id);
@@ -111,7 +153,7 @@ app.delete('/api/newsletter/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// Update status campaign saja
+// Update status campaign
 app.put('/api/newsletter/:id/status', (req, res) => {
   let nls = loadJson(NEWSLETTERS_FILE);
   const idx = nls.findIndex(nl => nl.id == req.params.id);
@@ -121,57 +163,99 @@ app.put('/api/newsletter/:id/status', (req, res) => {
   res.json(nls[idx]);
 });
 
-// Kirim campaign ke email terpilih
-app.post('/api/newsletter/:id/send', (req, res) => {
-  let nls = loadJson(NEWSLETTERS_FILE);
-  const idx = nls.findIndex(nl => nl.id == req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Not found' });
-  const newsletter = nls[idx];
-  const { emails } = req.body;
-  if (!emails || !Array.isArray(emails) || emails.length === 0) {
-    return res.status(400).json({ error: 'No emails selected' });
-  }
-  nls[idx].status = 'running';
-  saveJson(NEWSLETTERS_FILE, nls);
-  transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: emails,
-    subject: newsletter.title,
-    html: newsletter.content,
-  }, (err, info) => {
+// Kirim campaign secara manual
+app.post('/api/newsletter/:id/send', async (req, res) => {
+  try {
+    if (!transporter) {
+      return res.status(500).json({ error: 'Email service not configured.' });
+    }
+
+    let nls = loadJson(NEWSLETTERS_FILE);
+    const idx = nls.findIndex(nl => nl.id == req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Newsletter not found' });
+
+    const newsletter = nls[idx];
+    const { emails } = req.body;
+
+    if (!emails || !Array.isArray(emails) || emails.length === 0) {
+      return res.status(400).json({ error: 'No emails selected' });
+    }
+
+    nls[idx].status = 'running';
+    saveJson(NEWSLETTERS_FILE, nls);
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: emails.join(', '),
+      subject: newsletter.title,
+      html: newsletter.content,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
     nls = loadJson(NEWSLETTERS_FILE);
-    nls[idx].status = err ? 'stopped' : 'completed';
+    nls[idx].status = 'completed';
     nls[idx].lastSent = new Date();
     saveJson(NEWSLETTERS_FILE, nls);
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ success: true });
-  });
+
+    res.json({
+      success: true,
+      messageId: info.messageId,
+      recipients: emails.length
+    });
+
+  } catch (error) {
+    console.error('❌ Newsletter send error:', error.message);
+    let nls = loadJson(NEWSLETTERS_FILE);
+    const idx = nls.findIndex(nl => nl.id == req.params.id);
+    if (idx !== -1) {
+      nls[idx].status = 'stopped';
+      nls[idx].lastSent = new Date();
+      saveJson(NEWSLETTERS_FILE, nls);
+    }
+    res.status(500).json({ error: 'Failed to send newsletter', details: error.message });
+  }
 });
 
-// === Kirim otomatis (via cron) ===
-function sendNewsletter(newsletter) {
+// Fungsi kirim otomatis via cron
+async function sendNewsletter(newsletter) {
+  if (!transporter) {
+    console.error('❌ Cannot send newsletter: Email service not configured');
+    return;
+  }
+
   const subs = loadJson(SUBSCRIBERS_FILE);
-  if (subs.length === 0) return;
+  if (subs.length === 0) {
+    console.log('⚠️ No subscribers to send newsletter to');
+    return;
+  }
+
   const emails = subs.map(s => s.email);
-  transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: emails,
-    subject: newsletter.title,
-    html: newsletter.content,
-  }, (err, info) => {
-    if (err) console.error('Send error:', err);
-    else {
-      let nls = loadJson(NEWSLETTERS_FILE);
-      const idx = nls.findIndex(nl => nl.id === newsletter.id);
-      if (idx !== -1) {
-        nls[idx].lastSent = new Date();
-        saveJson(NEWSLETTERS_FILE, nls);
-      }
-      console.log('Newsletter sent:', newsletter.title);
+
+  try {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: emails.join(', '),
+      subject: newsletter.title,
+      html: newsletter.content,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
+    let nls = loadJson(NEWSLETTERS_FILE);
+    const idx = nls.findIndex(nl => nl.id === newsletter.id);
+    if (idx !== -1) {
+      nls[idx].lastSent = new Date();
+      saveJson(NEWSLETTERS_FILE, nls);
     }
-  });
+
+    console.log('✅ Newsletter sent automatically:', newsletter.title, 'Message ID:', info.messageId);
+  } catch (error) {
+    console.error('❌ Automatic newsletter send error:', error.message);
+  }
 }
 
+// Setup cron job
 function setupCronJob(newsletter) {
   if (newsletter.schedule) {
     cron.schedule(newsletter.schedule, () => sendNewsletter(newsletter), {
@@ -180,10 +264,15 @@ function setupCronJob(newsletter) {
   }
 }
 
-// Setup cron saat server start
+// Setup email dan jadwal awal
+setupTransporter();
 loadJson(NEWSLETTERS_FILE).forEach(setupCronJob);
 
 // Jalankan server
-app.listen(5000, () => {
-  console.log('✅ Newsletter backend running on http://localhost:5000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`✅ Newsletter backend running on http://localhost:${PORT}`);
+  if (!transporter) {
+    console.log('⚠️ Email service not configured. Newsletter sending will not work.');
+  }
 });
