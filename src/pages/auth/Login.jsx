@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/Auth.css';
 
 // Dummy credentials
@@ -20,6 +21,8 @@ const DUMMY_CREDENTIALS = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
@@ -31,22 +34,29 @@ const Login = () => {
       
       // Check admin credentials
       if (email === DUMMY_CREDENTIALS.admin.email && password === DUMMY_CREDENTIALS.admin.password) {
-        // Store user info in localStorage
-        localStorage.setItem('user', JSON.stringify({
+        const userData = {
           email: DUMMY_CREDENTIALS.admin.email,
           role: DUMMY_CREDENTIALS.admin.role
-        }));
+        };
+        login(userData);
         message.success('Login berhasil!');
-        navigate('/');
+        
+        // Redirect to intended page or default admin page
+        const from = location.state?.from?.pathname || '/';
+        navigate(from);
       }
       // Check user credentials
       else if (email === DUMMY_CREDENTIALS.user.email && password === DUMMY_CREDENTIALS.user.password) {
-        localStorage.setItem('user', JSON.stringify({
+        const userData = {
           email: DUMMY_CREDENTIALS.user.email,
           role: DUMMY_CREDENTIALS.user.role
-        }));
+        };
+        login(userData);
         message.success('Login berhasil!');
-        navigate('/guest');
+        
+        // Redirect to intended page or default user page
+        const from = location.state?.from?.pathname || '/guest';
+        navigate(from);
       }
       else {
         message.error('Email atau password salah!');

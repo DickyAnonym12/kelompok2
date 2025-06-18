@@ -1,40 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { FaShoppingCart, FaSearch } from "react-icons/fa";
+import React from "react";
+import { FaShoppingCart, FaSearch, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import sedap from "../assets/Sedap.png";
 
 function Header() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
 
-  const handleScroll = () => {
-    if (typeof window !== "undefined") {
-      if (window.scrollY > lastScrollY) {
-        // Scroll Down
-        setIsVisible(false);
-      } else {
-        // Scroll Up
-        setIsVisible(true);
-      }
-      setLastScrollY(window.scrollY);
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <nav
-      className={`bg-gradient-to-br from-orange-50 px-4 lg:px-6 py-4 transition-transform duration-300 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <nav className="bg-gradient-to-br from-orange-50 px-4 lg:px-6 py-4 fixed top-0 left-0 right-0 z-50 shadow-lg">
       <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
         {/* Logo */}
-        <a href="#" className="flex items-center space-x-2">
+        <a href="#" className="flex items-center space-x-2" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>
           <div className="h-10 w-auto">
             <img
               src={sedap}
@@ -50,14 +43,20 @@ function Header() {
         {/* Navigation Menu */}
         <div className="hidden items-center w-full lg:flex lg:w-auto">
           <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 items-center">
-            {["Home", "About", "Food", "Testimonial", "Contact", "FAQ"].map((item) => (
-              <li key={item}>
-                <a
-                  href={item === 'FAQ' ? '/faq' : '#'}
+            {[
+              { name: "Home", id: "home" },
+              { name: "About", id: "about" },
+              { name: "Products", id: "products" },
+              { name: "Testimonial", id: "testimonial" },
+              { name: "FAQ", id: "faq" }
+            ].map((item) => (
+              <li key={item.name}>
+                <button
+                  onClick={() => scrollToSection(item.id)}
                   className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
                 >
-                  {item}
-                </a>
+                  {item.name}
+                </button>
               </li>
             ))}
           </ul>
@@ -65,21 +64,21 @@ function Header() {
 
         {/* Right Icons & Auth */}
         <div className="flex items-center space-x-4">
-          {/* Login & Register */}
+          {/* User Info */}
           <div className="hidden lg:flex items-center space-x-4">
-            <a
-              href="/login"
-              className="text-[16px] text-[#2E2E3A] hover:text-orange-500 transition"
-            >
-              Login
-            </a>
-            <a
-              href="/register"
-              className="text-[16px] text-white bg-red-500 py-2 px-4 rounded-xl hover:bg-red-600 transition"
-            >
-              Register
-            </a>
+            <span className="text-sm text-gray-600">
+              Hi, {user?.email?.split('@')[0] || 'User'}
+            </span>
           </div>
+
+          {/* Newsletter Button */}
+          <button
+            onClick={() => scrollToSection('newsletter')}
+            className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
+          >
+            <FaEnvelope className="text-sm" />
+            <span className="text-sm font-medium">Newsletter</span>
+          </button>
 
           {/* Search Icon */}
           <div className="p-3 bg-gray-100 rounded-full text-gray-600 cursor-pointer hover:text-red-500 flex items-center justify-center">
@@ -95,6 +94,15 @@ function Header() {
               2
             </span>
           </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition"
+          >
+            <FaSignOutAlt className="text-sm" />
+            <span className="text-sm font-medium">Logout</span>
+          </button>
         </div>
       </div>
     </nav>

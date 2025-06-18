@@ -9,5 +9,21 @@
     "users": [
       "dicky.wijayaa01@gmail.com"
     ]
+  },
+  {
+    "id": 1750247520031,
+    "title": "Haloo",
+    "content": "<p>makasi sudah subscribe</p><p></p>",
+    "status": "completed",
+    "createdAt": "2025-06-18T11:52:00.031Z",
+    "lastSent": "2025-06-18T12:20:10.366Z"
+  },
+  {
+    "id": 1750249461805,
+    "title": "Halo lagi",
+    "content": "<p>percobaan ke 2</p>",
+    "status": "completed",
+    "createdAt": "2025-06-18T12:24:21.805Z",
+    "lastSent": "2025-06-18T12:24:32.112Z"
   }
 ]

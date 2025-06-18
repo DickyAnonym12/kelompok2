@@ -131,15 +131,34 @@ export default function NewsletterCampaigns() {
     setLoading(true);
     setNotif("");
     try {
-      await axios.post(
+      const response = await axios.post(
         `http://localhost:5000/api/newsletter/${selectedCampaign.id}/send`,
         { emails: selectedEmails }
       );
-      setNotif("Campaign sent successfully!");
+      
+      if (response.data.success) {
+        setNotif(`Campaign sent successfully to ${response.data.recipients} recipients!`);
+      } else {
+        setNotif("Campaign sent but with warnings.");
+      }
+      
       setShowModal(false);
       fetchData();
     } catch (err) {
-      setNotif("Failed to send campaign.");
+      console.error('Newsletter send error:', err);
+      
+      let errorMessage = "Failed to send campaign.";
+      
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+        if (err.response.data.details) {
+          errorMessage += ` (${err.response.data.details})`;
+        }
+      } else if (err.message) {
+        errorMessage = `Network error: ${err.message}`;
+      }
+      
+      setNotif(errorMessage);
     }
     setLoading(false);
   };
