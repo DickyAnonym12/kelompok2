@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import Image from '@tiptap/extension-image';
 
 export function AddCampaignForm({ onSuccess }) {
   const [title, setTitle] = useState("");
@@ -11,12 +12,14 @@ export function AddCampaignForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [notif, setNotif] = useState("");
   const navigate = useNavigate();
+  const fileInputRef = useRef();
 
   // Setup Tiptap editor
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
+      Image,
     ],
     content: content,
     editorProps: {
@@ -33,6 +36,20 @@ export function AddCampaignForm({ onSuccess }) {
   useEffect(() => {
     if (editor) editor.commands.setContent(content);
   }, [editor]);
+
+  // Handle image upload and insert as base64
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result;
+      editor.chain().focus().setImage({ src: base64 }).run();
+    };
+    reader.readAsDataURL(file);
+    // Reset input so same file can be uploaded again if needed
+    event.target.value = null;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,7 +84,7 @@ export function AddCampaignForm({ onSuccess }) {
         <div>
           <label className="block font-semibold mb-2">Content</label>
           {editor && (
-            <div className="flex gap-1 mb-2">
+            <div className="flex gap-1 mb-2 flex-wrap">
               <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={`px-2 py-1 rounded text-base font-bold ${editor.isActive('bold') ? 'text-indigo-700 bg-indigo-100' : 'text-gray-700 hover:bg-gray-100'}`}>B</button>
               <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={`px-2 py-1 rounded text-base italic ${editor.isActive('italic') ? 'text-indigo-700 bg-indigo-100' : 'text-gray-700 hover:bg-gray-100'}`}>I</button>
               <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} className={`px-2 py-1 rounded text-base underline ${editor.isActive('underline') ? 'text-indigo-700 bg-indigo-100' : 'text-gray-700 hover:bg-gray-100'}`}>U</button>
@@ -76,6 +93,28 @@ export function AddCampaignForm({ onSuccess }) {
               <button type="button" onClick={() => editor.chain().focus().setParagraph().run()} className={`px-2 py-1 rounded text-base ${editor.isActive('paragraph') ? 'text-indigo-700 bg-indigo-100' : 'text-gray-700 hover:bg-gray-100'}`}>P</button>
               <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={`px-2 py-1 rounded text-base ${editor.isActive('heading', { level: 1 }) ? 'text-indigo-700 bg-indigo-100' : 'text-gray-700 hover:bg-gray-100'}`}>H1</button>
               <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={`px-2 py-1 rounded text-base ${editor.isActive('heading', { level: 2 }) ? 'text-indigo-700 bg-indigo-100' : 'text-gray-700 hover:bg-gray-100'}`}>H2</button>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                className="px-2 py-1 rounded text-base text-blue-700 bg-blue-100 hover:bg-blue-200 border border-blue-200"
+                title="Insert Image"
+              >🖼️</button>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleImageUpload}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const url = window.prompt('Masukkan URL gambar (gunakan link https://...)');
+                  if (url) editor.chain().focus().setImage({ src: url }).run();
+                }}
+                className="px-2 py-1 rounded text-base text-yellow-700 bg-yellow-100 hover:bg-yellow-200 border border-yellow-200"
+                title="Insert Image by URL"
+              >🌐</button>
             </div>
           )}
           <EditorContent

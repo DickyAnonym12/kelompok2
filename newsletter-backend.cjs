@@ -15,7 +15,7 @@ const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '25mb' }));
 app.use(cors());
 
 const SUBSCRIBERS_FILE = './subscribers.json';
