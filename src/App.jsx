@@ -23,8 +23,6 @@ const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 const Error400 = React.lazy(() => import("./pages/Error400"));
 const Error403 = React.lazy(() => import("./pages/Error403"));
 const Error404 = React.lazy(() => import("./pages/Error404"));
-const OrderList = React.lazy(() => import("./components/OrderList"));
-const UserList = React.lazy(() => import("./components/UserList"));
 const PesananButik = React.lazy(() => import("./pages/PesananButik"));
 const DetailPesananButik = React.lazy(() => import("./pages/DetailPesanan"));
 const LaporanPenjualan = React.lazy(() => import("./pages/LaporanPenjualan"));
