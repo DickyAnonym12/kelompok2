@@ -1,19 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
-const initialData = [
-  { no: 1, product: 'Blouse Katun', qty: 3, price: 120000, discount: 0, total: 360000 },
-  { no: 2, product: 'Dress Batik', qty: 2, price: 250000, discount: 20000, total: 480000 },
-  { no: 3, product: 'Celana Kulot', qty: 4, price: 90000, discount: 0, total: 360000 },
-  { no: 4, product: 'Hijab Voal', qty: 5, price: 50000, discount: 0, total: 250000 },
-  { no: 5, product: 'Outer Rajut', qty: 1, price: 175000, discount: 25000, total: 150000 },
-];
+import { supabase } from '../supabase';
 
 const emptyForm = { product: '', qty: '', price: '', discount: '', total: '' };
 
 export default function LaporanPenjualan() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]); // Initialize with an empty array, data will be fetched from Supabase
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editIndex, setEditIndex] = useState(null);
@@ -21,6 +14,32 @@ export default function LaporanPenjualan() {
   const [deleteIndex, setDeleteIndex] = useState(null);
 
   const sumTotal = data.reduce((acc, item) => acc + Number(item.total), 0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: laporan, error } = await supabase
+        .from('laporan_penjualan')
+        .select('*')
+        .order('id', { ascending: true }); // Order by 'id' to maintain consistent numbering
+
+      if (error) {
+        console.error('Error fetching data:', error);
+      } else if (laporan) {
+        setData(
+          laporan.map((item, idx) => ({
+            no: idx + 1, // Assign 'no' based on fetched order
+            product: item.product_name,
+            qty: item.quantity,
+            price: item.unit_price,
+            discount: item.discount,
+            total: item.total,
+            id: item.id, // Keep the Supabase ID for updates/deletes
+          }))
+        );
+      }
+    };
+    fetchData();
+  }, []);
 
   const openAddModal = () => {
     setForm(emptyForm);
@@ -43,36 +62,69 @@ export default function LaporanPenjualan() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newForm = { ...form, [name]: value };
-    if (["qty", "price", "discount"].includes(name)) {
-      const qty = Number(name === "qty" ? value : newForm.qty || 0);
-      const price = Number(name === "price" ? value : newForm.price || 0);
-      const discount = Number(name === "discount" ? value : newForm.discount || 0);
-      newForm.total = qty * price - discount;
-    }
+
+    // Ensure numerical inputs are parsed as numbers for calculation
+    const qty = Number(name === "qty" ? value : newForm.qty || 0);
+    const price = Number(name === "price" ? value : newForm.price || 0);
+    const discount = Number(name === "discount" ? value : newForm.discount || 0);
+
+    newForm.total = qty * price - discount;
+
     setForm(newForm);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.product || !form.qty || !form.price) return;
+    if (!form.product || !form.qty || !form.price) {
+      alert('Product, Quantity, and Unit Price are required.');
+      return;
+    }
+
+    // Prepare data for Supabase, mapping form fields to table column names
+    const dataToSave = {
+      product_name: form.product,
+      quantity: Number(form.qty),
+      unit_price: Number(form.price),
+      discount: Number(form.discount),
+      total: Number(form.total),
+    };
+
     if (editIndex !== null) {
-      // Edit
-      const newData = [...data];
-      newData[editIndex] = { ...form, no: newData[editIndex].no, qty: Number(form.qty), price: Number(form.price), discount: Number(form.discount), total: Number(form.total) };
-      setData(newData);
+      // Edit (update in Supabase)
+      const item = data[editIndex];
+      const { error } = await supabase
+        .from('laporan_penjualan')
+        .update(dataToSave)
+        .eq('id', item.id); // Use Supabase ID for update
+
+      if (error) {
+        console.error('Error updating data:', error);
+      } else {
+        // Update local state after successful Supabase update
+        const newData = [...data];
+        newData[editIndex] = { ...form, no: item.no, id: item.id }; // Retain original 'no' and 'id'
+        setData(newData);
+      }
     } else {
-      // Add
-      setData([
-        ...data,
-        {
-          ...form,
-          no: data.length ? Math.max(...data.map(d => d.no)) + 1 : 1,
-          qty: Number(form.qty),
-          price: Number(form.price),
-          discount: Number(form.discount),
-          total: Number(form.total)
-        }
-      ]);
+      // Add (insert to Supabase)
+      const { data: inserted, error } = await supabase
+        .from('laporan_penjualan')
+        .insert([dataToSave]) // Use the mapped data for insertion
+        .select(); // Select the inserted row to get its ID
+
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else if (inserted && inserted.length > 0) {
+        // Add to local state after successful Supabase insert
+        setData([
+          ...data,
+          {
+            ...form,
+            no: data.length ? Math.max(...data.map(d => d.no)) + 1 : 1, // Assign new 'no'
+            id: inserted[0].id, // Use the ID returned from Supabase
+          },
+        ]);
+      }
     }
     closeModal();
   };
@@ -82,8 +134,16 @@ export default function LaporanPenjualan() {
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
-    setData(data.filter((_, i) => i !== deleteIndex));
+  const confirmDelete = async () => {
+    const item = data[deleteIndex];
+    const { error } = await supabase.from('laporan_penjualan').delete().eq('id', item.id);
+
+    if (error) {
+      console.error('Error deleting data:', error);
+    } else {
+      // Update local state after successful Supabase delete and re-index 'no'
+      setData(data.filter((_, i) => i !== deleteIndex).map((item, idx) => ({ ...item, no: idx + 1 })));
+    }
     setShowDeleteModal(false);
     setDeleteIndex(null);
   };
@@ -169,7 +229,7 @@ export default function LaporanPenjualan() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
               {data.map((item, idx) => (
-                <tr key={item.no} className="hover:bg-gray-50">
+                <tr key={item.id} className="hover:bg-gray-50"> {/* Use item.id as key */}
                   <td className="px-6 py-4 font-medium text-gray-700">{item.no}</td>
                   <td className="px-6 py-4">{item.product}</td>
                   <td className="px-6 py-4">{item.qty}</td>
@@ -251,4 +311,4 @@ export default function LaporanPenjualan() {
       )}
     </div>
   );
-} 
+}
