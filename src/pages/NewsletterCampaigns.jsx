@@ -14,40 +14,21 @@ export function AddCampaignForm({ onSuccess }) {
   const navigate = useNavigate();
   const fileInputRef = useRef();
 
-  // Setup Tiptap editor
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Image,
-    ],
+    extensions: [StarterKit, Underline, Image],
     content: content,
+    onUpdate: ({ editor }) => setContent(editor.getHTML()),
     editorProps: {
-      attributes: {
-        class: 'outline-none min-h-[140px] text-base px-3 py-2',
-        placeholder: 'Write your campaign content here...'
-      },
-    },
-    onUpdate: ({ editor }) => {
-      setContent(editor.getHTML());
+      attributes: { class: 'outline-none min-h-[140px] text-base px-3 py-2' },
     },
   });
 
-  useEffect(() => {
-    if (editor) editor.commands.setContent(content);
-  }, [editor]);
-
-  // Handle image upload and insert as base64
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (e) => {
-      const base64 = e.target.result;
-      editor.chain().focus().setImage({ src: base64 }).run();
-    };
+    reader.onload = (e) => editor.chain().focus().setImage({ src: e.target.result }).run();
     reader.readAsDataURL(file);
-    // Reset input so same file can be uploaded again if needed
     event.target.value = null;
   };
 
@@ -59,7 +40,7 @@ export function AddCampaignForm({ onSuccess }) {
       await axios.post("http://localhost:5000/api/newsletter", { title, content });
       setNotif("Campaign added!");
       if (onSuccess) onSuccess();
-      setTimeout(() => navigate("/newsletter-campaigns"), 800);
+      setTimeout(() => navigate("/admin/newsletter-campaigns"), 800);
     } catch (err) {
       setNotif("Failed to add campaign");
     }
@@ -123,11 +104,7 @@ export function AddCampaignForm({ onSuccess }) {
           />
         </div>
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold text-base shadow hover:bg-green-700 transition"
-            disabled={loading}
-          >
+          <button type="submit" className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold text-base shadow hover:bg-green-700 transition" disabled={loading}>
             {loading ? 'Adding...' : 'Add'}
           </button>
         </div>
@@ -147,19 +124,25 @@ export default function NewsletterCampaigns() {
   const [notif, setNotif] = useState("");
   const navigate = useNavigate();
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [c, s] = await Promise.all([
+        axios.get("http://localhost:5000/api/newsletter"),
+        axios.get("http://localhost:5000/api/subscriber"),
+      ]);
+      setCampaigns(c.data);
+      setSubscribers(s.data.filter(sub => sub.status !== 'unsubscribed'));
+    } catch (error) {
+      setNotif("Failed to fetch data");
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
-  const fetchData = async () => {
-    const [c, s] = await Promise.all([
-      axios.get("http://localhost:5000/api/newsletter"),
-      axios.get("http://localhost:5000/api/subscriber"),
-    ]);
-    setCampaigns(c.data);
-    setSubscribers(s.data);
-  };
 
-  // Start campaign
   const handleStart = (campaign) => {
     setSelectedCampaign(campaign);
     setSelectedEmails([]);
@@ -170,39 +153,19 @@ export default function NewsletterCampaigns() {
     setLoading(true);
     setNotif("");
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:5000/api/newsletter/${selectedCampaign.id}/send`,
         { emails: selectedEmails }
       );
-      
-      if (response.data.success) {
-        setNotif(`Campaign sent successfully to ${response.data.recipients} recipients!`);
-      } else {
-        setNotif("Campaign sent but with warnings.");
-      }
-      
+      setNotif(`Campaign sent successfully!`);
       setShowModal(false);
       fetchData();
     } catch (err) {
-      console.error('Newsletter send error:', err);
-      
-      let errorMessage = "Failed to send campaign.";
-      
-      if (err.response?.data?.error) {
-        errorMessage = err.response.data.error;
-        if (err.response.data.details) {
-          errorMessage += ` (${err.response.data.details})`;
-        }
-      } else if (err.message) {
-        errorMessage = `Network error: ${err.message}`;
-      }
-      
-      setNotif(errorMessage);
+      setNotif("Failed to send campaign. Check server logs.");
     }
     setLoading(false);
   };
 
-  // Delete campaign
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this campaign?")) return;
     await axios.delete(`http://localhost:5000/api/newsletter/${id}`);
@@ -218,7 +181,7 @@ export default function NewsletterCampaigns() {
         </div>
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => navigate("/newsletter-admin")}
+          onClick={() => navigate("/admin/newsletter-admin")}
         >
           Back to Subscribers
         </button>
@@ -228,7 +191,7 @@ export default function NewsletterCampaigns() {
         <div className="mb-4">
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={() => navigate("/newsletter-campaigns/add")}
+            onClick={() => navigate("/admin/newsletter-campaigns/add")}
           >
             Add campaign
           </button>
@@ -236,110 +199,71 @@ export default function NewsletterCampaigns() {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead>
             <tr className="bg-indigo-600 text-white">
-              <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3">Title</th>
-              <th className="px-4 py-3">Content</th>
+              <th className="px-4 py-3">Content Preview</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Created at</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {campaigns.map((c) => (
-              <tr key={c.id} className="hover:bg-gray-50">
-                <td className="px-4 py-2">{c.id}</td>
-                <td className="px-4 py-2">{c.title}</td>
-                <td className="px-4 py-2">
-                  <div className="truncate max-w-xs">{c.content}</div>
-                </td>
-                <td className="px-4 py-2">{c.status}</td>
-                <td className="px-4 py-2">{new Date(c.createdAt).toLocaleString()}</td>
-                <td className="px-4 py-2 flex gap-2">
-                  <button
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
-                    onClick={() => handleStart(c)}
-                    disabled={c.status === "running" || c.status === "completed"}
-                  >
-                    Start
-                  </button>
-                  <button
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-                    onClick={() => navigate(`/newsletter-campaigns/${c.id}/edit`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
-                    onClick={() => handleDelete(c.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {campaigns.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center py-6 text-gray-400">
-                  No campaigns found.
-                </td>
-              </tr>
+            {loading ? (
+              <tr><td colSpan="5" className="text-center py-6">Loading...</td></tr>
+            ) : (
+              campaigns.map((c) => (
+                <tr key={c.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2">{c.title}</td>
+                  <td className="px-4 py-2">
+                    <div className="truncate max-w-xs" dangerouslySetInnerHTML={{ __html: c.content }} />
+                  </td>
+                  <td className="px-4 py-2">{c.status}</td>
+                  <td className="px-4 py-2">{c.createdAt ? new Date(c.createdAt).toLocaleString() : 'N/A'}</td>
+                  <td className="px-4 py-2 flex gap-2">
+                    <button
+                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
+                      onClick={() => handleStart(c)}
+                      disabled={c.status === "running" || c.status === "completed"}
+                    >
+                      Start
+                    </button>
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded" onClick={() => handleDelete(c.id)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+            {campaigns.length === 0 && !loading && (
+              <tr><td colSpan="5" className="text-center py-6 text-gray-400">No campaigns found.</td></tr>
             )}
           </tbody>
         </table>
       </div>
-      {/* Modal pilih subscriber */}
+      
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
-            >
-              &times;
-            </button>
             <h2 className="text-xl font-bold mb-4">Select Subscribers</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
-              }}
-              className="space-y-4"
-            >
+            <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="space-y-4">
               <div className="max-h-48 overflow-y-auto border rounded p-2">
                 {subscribers.map((s) => (
-                  <label key={s.email} className="flex items-center gap-2 mb-1">
+                  <label key={s.id} className="flex items-center gap-2 mb-1">
                     <input
                       type="checkbox"
                       value={s.email}
                       checked={selectedEmails.includes(s.email)}
                       onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedEmails([...selectedEmails, s.email]);
-                        } else {
-                          setSelectedEmails(selectedEmails.filter((em) => em !== s.email));
-                        }
+                        if (e.target.checked) setSelectedEmails([...selectedEmails, s.email]);
+                        else setSelectedEmails(selectedEmails.filter((em) => em !== s.email));
                       }}
                     />
                     {s.email}
                   </label>
                 ))}
-                {subscribers.length === 0 && (
-                  <div className="text-gray-400">No subscribers found.</div>
-                )}
               </div>
               <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
-                  disabled={loading || selectedEmails.length === 0}
-                >
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancel</button>
+                <button type="submit" className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold" disabled={loading || selectedEmails.length === 0}>
                   {loading ? "Sending..." : "Send"}
                 </button>
               </div>
@@ -347,9 +271,6 @@ export default function NewsletterCampaigns() {
           </div>
         </div>
       )}
-      <div className="text-center text-gray-400 mt-8">
-        © Copyright. All Rights Reserved
-      </div>
     </div>
   );
 } 

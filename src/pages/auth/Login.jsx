@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../supabase'; // Import Supabase
+import { supabase } from '../../supabase'; // Hanya perlu supabase
 import '../../styles/Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
@@ -17,46 +15,37 @@ const Login = () => {
     const { email, password } = values;
 
     try {
-      // Cari pengguna berdasarkan email di tabel 'users'
-      const { data: user, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', email)
-        .single();
+      // Gunakan Supabase Auth untuk login
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      if (error || !user) {
-        message.error('Email tidak ditemukan!');
+      if (error) {
+        // Tangani error dari Supabase
+        message.error(error.message || 'Email atau password salah.');
         setLoading(false);
         return;
       }
 
-      // PERINGATAN: Membandingkan password teks biasa adalah tidak aman!
-      if (user.password !== password) {
-        message.error('Password salah!');
-        setLoading(false);
-        return;
-      }
+      if (data.user) {
+        message.success('Login berhasil!');
+        // AuthContext akan otomatis update dari onAuthStateChange
 
-      // Jika login berhasil
-      const userData = {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        name: user.name,
-      };
-      login(userData);
-      message.success('Login berhasil!');
-
-      // Arahkan berdasarkan peran (role)
-      if (user.role === 'admin') {
-        navigate('/admin');
+        // Arahkan berdasarkan peran dari metadata pengguna
+        const userRole = data.user.user_metadata?.role;
+        if (userRole === 'admin') {
+          navigate('/admin');
+        } else {
+          // Arahkan ke halaman asal jika ada, atau ke dashboard utama
+          const from = location.state?.from?.pathname || '/';
+          navigate(from, { replace: true });
+        }
       } else {
-        const from = location.state?.from?.pathname || '/';
-        navigate(from);
+        message.error('Terjadi kesalahan, pengguna tidak ditemukan setelah login.');
       }
-
     } catch (err) {
-      message.error('Terjadi kesalahan saat login.');
+      message.error('Terjadi kesalahan tak terduga saat login.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -125,4 +114,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;

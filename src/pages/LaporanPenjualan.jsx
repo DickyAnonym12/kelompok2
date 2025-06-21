@@ -20,7 +20,7 @@ export default function LaporanPenjualan() {
     const { data: laporan, error } = await supabase
       .from('laporan_penjualan')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('id', { ascending: true });
 
     if (error) {
       console.error('Error fetching data:', error);

@@ -23,7 +23,6 @@ export default function NewsletterAdmin() {
     setLoading(false);
   };
 
-  // Untuk update status subscribe/unsubscribe (tambahkan endpoint PATCH/PUT di backend jika belum ada)
   const handleStatusChange = async (email, status) => {
     try {
       await axios.patch(`http://localhost:5000/api/subscriber/${email}`, { status });
@@ -44,7 +43,7 @@ export default function NewsletterAdmin() {
         </div>
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => navigate("/newsletter-campaigns")}
+          onClick={() => navigate("/admin/newsletter-campaigns")}
         >
           Campaigns
         </button>
@@ -75,12 +74,14 @@ export default function NewsletterAdmin() {
                     <span className="mr-2">Active</span>
                     <input
                       type="radio"
+                      name={`status-${sub.email}`}
                       checked={sub.status !== "unsubscribed"}
                       onChange={() => handleStatusChange(sub.email, "active")}
                     />
                     <span className="mx-2">Unsubscribe</span>
                     <input
                       type="radio"
+                      name={`status-${sub.email}`}
                       checked={sub.status === "unsubscribed"}
                       onChange={() => handleStatusChange(sub.email, "unsubscribed")}
                     />
