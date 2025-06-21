@@ -4,27 +4,27 @@ import { useFaq } from '../context/FaqContext';
 const emptyForm = { question: '', answer: '' };
 
 export default function FaqAdmin() {
-  const { faq, setFaq } = useFaq();
+  const { faq, addFaq, updateFaq, deleteFaq } = useFaq();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(emptyForm);
-  const [editIndex, setEditIndex] = useState(null);
+  const [currentItem, setCurrentItem] = useState(null);
 
   const openAddModal = () => {
     setForm(emptyForm);
-    setEditIndex(null);
+    setCurrentItem(null);
     setShowModal(true);
   };
 
-  const openEditModal = (idx) => {
-    setForm({ ...faq[idx] });
-    setEditIndex(idx);
+  const openEditModal = (item) => {
+    setCurrentItem(item);
+    setForm({ question: item.question, answer: item.answer });
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
     setForm(emptyForm);
-    setEditIndex(null);
+    setCurrentItem(null);
   };
 
   const handleChange = (e) => {
@@ -35,41 +35,33 @@ export default function FaqAdmin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.question || !form.answer) return;
-    if (editIndex !== null) {
-      // Edit
-      const newFaq = [...faq];
-      newFaq[editIndex] = { ...form, id: newFaq[editIndex].id };
-      setFaq(newFaq);
+    if (currentItem) {
+      updateFaq(currentItem.id, form);
     } else {
-      // Add
-      setFaq([
-        ...faq,
-        {
-          ...form,
-          id: faq.length ? Math.max(...faq.map(f => f.id)) + 1 : 1,
-        }
-      ]);
+      addFaq(form);
     }
     closeModal();
   };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
-  const handleDelete = (idx) => {
-    setDeleteIndex(idx);
+  const handleDelete = (item) => {
+    setItemToDelete(item);
     setShowDeleteModal(true);
   };
 
   const confirmDelete = () => {
-    setFaq(faq.filter((_, i) => i !== deleteIndex));
+    if (itemToDelete) {
+      deleteFaq(itemToDelete.id);
+    }
     setShowDeleteModal(false);
-    setDeleteIndex(null);
+    setItemToDelete(null);
   };
 
   const cancelDelete = () => {
     setShowDeleteModal(false);
-    setDeleteIndex(null);
+    setItemToDelete(null);
   };
 
   return (
@@ -96,13 +88,13 @@ export default function FaqAdmin() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
-              {faq.map((item, idx) => (
+              {faq.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium text-gray-700 w-1/3">{item.question}</td>
                   <td className="px-6 py-4 w-1/2">{item.answer}</td>
                   <td className="px-6 py-4 flex gap-2">
-                    <button onClick={() => openEditModal(idx)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
-                    <button onClick={() => handleDelete(idx)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
+                    <button onClick={() => openEditModal(item)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+                    <button onClick={() => handleDelete(item)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
                   </td>
                 </tr>
               ))}
@@ -119,7 +111,7 @@ export default function FaqAdmin() {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md relative">
             <button onClick={closeModal} className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
-            <h2 className="text-xl font-bold mb-4">{editIndex !== null ? 'Edit FAQ' : 'Tambah FAQ'}</h2>
+            <h2 className="text-xl font-bold mb-4">{currentItem ? 'Edit FAQ' : 'Tambah FAQ'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Pertanyaan</label>
@@ -131,7 +123,7 @@ export default function FaqAdmin() {
               </div>
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={closeModal} className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Batal</button>
-                <button type="submit" className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">{editIndex !== null ? 'Update' : 'Tambah'}</button>
+                <button type="submit" className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">{currentItem ? 'Update' : 'Tambah'}</button>
               </div>
             </form>
           </div>

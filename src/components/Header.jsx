@@ -1,11 +1,11 @@
 import React from "react";
-import { FaShoppingCart, FaSearch, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaEnvelope, FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import sedap from "../assets/Sedap.png";
 
 function Header() {
-  const { logout, user } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const scrollToSection = (sectionId) => {
@@ -64,45 +64,60 @@ function Header() {
 
         {/* Right Icons & Auth */}
         <div className="flex items-center space-x-4">
-          {/* User Info */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
-              Hi, {user?.email?.split('@')[0] || 'User'}
-            </span>
-          </div>
+          {isAuthenticated ? (
+            <>
+              {/* User Info */}
+              <div className="hidden lg:flex items-center space-x-4">
+                <span className="text-sm text-gray-600">
+                  Hi, {user?.name || user?.email?.split('@')[0] || 'User'}
+                </span>
+              </div>
 
-          {/* Newsletter Button */}
-          <button
-            onClick={() => scrollToSection('newsletter')}
-            className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
-          >
-            <FaEnvelope className="text-sm" />
-            <span className="text-sm font-medium">Newsletter</span>
-          </button>
+              {/* Newsletter Button */}
+              <button
+                onClick={() => scrollToSection('newsletter')}
+                className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
+              >
+                <FaEnvelope className="text-sm" />
+                <span className="text-sm font-medium">Newsletter</span>
+              </button>
 
-          {/* Search Icon */}
-          <div className="p-3 bg-gray-100 rounded-full text-gray-600 cursor-pointer hover:text-red-500 flex items-center justify-center">
-            <FaSearch />
-          </div>
+              {/* Search Icon */}
+              <div className="p-3 bg-gray-100 rounded-full text-gray-600 cursor-pointer hover:text-red-500 flex items-center justify-center">
+                <FaSearch />
+              </div>
 
-          {/* Cart Icon with Badge */}
-          <div className="relative flex items-center justify-center">
-            <div className="p-3 bg-gray-100 rounded-full text-gray-600 cursor-pointer hover:text-red-500">
-              <FaShoppingCart />
-            </div>
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-1.5">
-              2
-            </span>
-          </div>
+              {/* Cart Icon with Badge */}
+              <div className="relative flex items-center justify-center">
+                <div className="p-3 bg-gray-100 rounded-full text-gray-600 cursor-pointer hover:text-red-500">
+                  <FaShoppingCart />
+                </div>
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-1.5">
+                  2
+                </span>
+              </div>
 
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition"
-          >
-            <FaSignOutAlt className="text-sm" />
-            <span className="text-sm font-medium">Logout</span>
-          </button>
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition"
+              >
+                <FaSignOutAlt className="text-sm" />
+                <span className="text-sm font-medium">Logout</span>
+              </button>
+            </>
+          ) : (
+            <>
+              {/* Login Button */}
+              <button
+                onClick={() => navigate('/login')}
+                className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
+              >
+                <FaSignInAlt className="text-sm" />
+                <span className="text-sm font-medium">Login</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </nav>

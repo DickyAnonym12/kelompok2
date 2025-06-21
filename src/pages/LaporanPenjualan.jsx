@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { supabase } from '../supabase';
 
 const initialData = [
   { no: 1, product: 'Blouse Katun', qty: 3, price: 120000, discount: 0, total: 360000 },
@@ -21,6 +22,28 @@ export default function LaporanPenjualan() {
   const [deleteIndex, setDeleteIndex] = useState(null);
 
   const sumTotal = data.reduce((acc, item) => acc + Number(item.total), 0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: laporan, error } = await supabase
+        .from('laporan_penjualan')
+        .select('*');
+      if (!error && laporan) {
+        setData(
+          laporan.map((item, idx) => ({
+            no: idx + 1,
+            product: item.product_name,
+            qty: item.quantity,
+            price: item.unit_price,
+            discount: item.discount,
+            total: item.total,
+            id: item.id,
+          }))
+        );
+      }
+    };
+    fetchData();
+  }, []);
 
   const openAddModal = () => {
     setForm(emptyForm);
@@ -52,27 +75,57 @@ export default function LaporanPenjualan() {
     setForm(newForm);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.product || !form.qty || !form.price) return;
+
     if (editIndex !== null) {
-      // Edit
-      const newData = [...data];
-      newData[editIndex] = { ...form, no: newData[editIndex].no, qty: Number(form.qty), price: Number(form.price), discount: Number(form.discount), total: Number(form.total) };
-      setData(newData);
-    } else {
-      // Add
-      setData([
-        ...data,
-        {
-          ...form,
-          no: data.length ? Math.max(...data.map(d => d.no)) + 1 : 1,
-          qty: Number(form.qty),
-          price: Number(form.price),
+      // Edit (update di Supabase)
+      const item = data[editIndex];
+      const { error } = await supabase
+        .from('laporan_penjualan')
+        .update({
+          product_name: form.product,
+          quantity: Number(form.qty),
+          unit_price: Number(form.price),
           discount: Number(form.discount),
-          total: Number(form.total)
-        }
-      ]);
+          total: Number(form.total),
+        })
+        .eq('id', item.id);
+      if (!error) {
+        // Update state lokal
+        const newData = [...data];
+        newData[editIndex] = { ...form, no: item.no, qty: Number(form.qty), price: Number(form.price), discount: Number(form.discount), total: Number(form.total), id: item.id };
+        setData(newData);
+      }
+    } else {
+      // Add (insert ke Supabase)
+      const { data: inserted, error } = await supabase
+        .from('laporan_penjualan')
+        .insert([
+          {
+            product_name: form.product,
+            quantity: Number(form.qty),
+            unit_price: Number(form.price),
+            discount: Number(form.discount),
+            total: Number(form.total),
+          },
+        ])
+        .select();
+      if (!error && inserted && inserted.length > 0) {
+        setData([
+          ...data,
+          {
+            ...form,
+            no: data.length ? Math.max(...data.map(d => d.no)) + 1 : 1,
+            qty: Number(form.qty),
+            price: Number(form.price),
+            discount: Number(form.discount),
+            total: Number(form.total),
+            id: inserted[0].id,
+          },
+        ]);
+      }
     }
     closeModal();
   };
@@ -82,7 +135,9 @@ export default function LaporanPenjualan() {
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
+    const item = data[deleteIndex];
+    await supabase.from('laporan_penjualan').delete().eq('id', item.id);
     setData(data.filter((_, i) => i !== deleteIndex));
     setShowDeleteModal(false);
     setDeleteIndex(null);

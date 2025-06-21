@@ -13,20 +13,21 @@ import {
   import { Link, useLocation } from 'react-router-dom'
   
   const menuItems = [
-    { name: 'Dashboard', icon: <LayoutDashboard />, path: '/' },
-    { name: 'Produk', icon: <Box />, path: '/products' },
-    { name: 'Laporan Penjualan', icon: <BarChart2 />, path: '/laporan-penjualan' },
-    { name: 'Pelanggan', icon: <Users />, path: '/pelanggan' },
-    { name: 'FAQ Admin', icon: <Settings />, path: '/faq-admin' },
-    { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/pesanan-butik' },
-    { name: 'Newsletter', icon: <BarChart2 />, path: '/newsletter-admin' },
-    { name: 'Member Ship', icon: <MdOutlineWorkspacePremium />, path: '/membership' },
+    { name: 'Dashboard', icon: <LayoutDashboard />, path: '/admin' },
+    { name: 'Produk', icon: <Box />, path: '/admin/products' },
+    { name: 'Laporan Penjualan', icon: <BarChart2 />, path: '/admin/laporan-penjualan' },
+    { name: 'Pelanggan', icon: <Users />, path: '/admin/pelanggan' },
+    { name: 'FAQ Admin', icon: <Settings />, path: '/admin/faq-admin' },
+    { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/admin/pesanan-butik' },
+    { name: 'Newsletter', icon: <BarChart2 />, path: '/admin/newsletter-admin' },
+    { name: 'Member Ship', icon: <MdOutlineWorkspacePremium />, path: '/admin/membership' },
+    { name: 'User List', icon: <Users />, path: '/admin/user-list' },
   ]
   
   const accountItems = [
-    { name: 'Pengaturan Akun', icon: <Settings />, path: '/akun' },
-    { name: 'Sign In', icon: <LogIn />, path: '/signin' },
-    { name: 'Sign Up', icon: <UserPlus />, path: '/signup' },
+    { name: 'Pengaturan Akun', icon: <Settings />, path: '/admin/akun' },
+    { name: 'Sign In', icon: <LogIn />, path: '/login' },
+    { name: 'Sign Up', icon: <UserPlus />, path: '/register' },
   ]
   
   const Sidebar = () => {

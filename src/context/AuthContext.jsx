@@ -25,9 +25,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('user');
   };
 
-  const isAuthenticated = () => {
-    return user !== null;
-  };
+  const isAuthenticated = user !== null;
 
   const isAdmin = () => {
     return user && user.role === 'admin';
@@ -42,7 +40,7 @@ export function AuthProvider({ children }) {
       user, 
       login, 
       logout, 
-      isAuthenticated, 
+      isAuthenticated,
       isAdmin, 
       isUser,
       loading 
