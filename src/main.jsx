@@ -3,11 +3,14 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom";
 import App from './App.jsx'
 import { FaqProvider } from './context/FaqContext';
+import { StyleProvider } from '@ant-design/cssinjs';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <FaqProvider>
-      <App />
-    </FaqProvider>
+    <StyleProvider hashPriority="high">
+      <FaqProvider>
+        <App />
+      </FaqProvider>
+    </StyleProvider>
   </BrowserRouter>,
 )

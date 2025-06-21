@@ -3,21 +3,8 @@ import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../supabase'; // Import Supabase
 import '../../styles/Auth.css';
-
-// Dummy credentials
-const DUMMY_CREDENTIALS = {
-  admin: {
-    email: 'admin@umkm.com',
-    password: 'admin123',
-    role: 'admin'
-  },
-  user: {
-    email: 'user@umkm.com',
-    password: 'user123',
-    role: 'user'
-  }
-};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,45 +12,55 @@ const Login = () => {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     setLoading(true);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      const { email, password } = values;
-      
-      // Check admin credentials
-      if (email === DUMMY_CREDENTIALS.admin.email && password === DUMMY_CREDENTIALS.admin.password) {
-        const userData = {
-          email: DUMMY_CREDENTIALS.admin.email,
-          role: DUMMY_CREDENTIALS.admin.role
-        };
-        login(userData);
-        message.success('Login berhasil!');
-        
-        // Redirect to intended page or default admin page
+    const { email, password } = values;
+
+    try {
+      // Cari pengguna berdasarkan email di tabel 'users'
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if (error || !user) {
+        message.error('Email tidak ditemukan!');
+        setLoading(false);
+        return;
+      }
+
+      // PERINGATAN: Membandingkan password teks biasa adalah tidak aman!
+      if (user.password !== password) {
+        message.error('Password salah!');
+        setLoading(false);
+        return;
+      }
+
+      // Jika login berhasil
+      const userData = {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+      };
+      login(userData);
+      message.success('Login berhasil!');
+
+      // Arahkan berdasarkan peran (role)
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
         const from = location.state?.from?.pathname || '/';
         navigate(from);
       }
-      // Check user credentials
-      else if (email === DUMMY_CREDENTIALS.user.email && password === DUMMY_CREDENTIALS.user.password) {
-        const userData = {
-          email: DUMMY_CREDENTIALS.user.email,
-          role: DUMMY_CREDENTIALS.user.role
-        };
-        login(userData);
-        message.success('Login berhasil!');
-        
-        // Redirect to intended page or default user page
-        const from = location.state?.from?.pathname || '/guest';
-        navigate(from);
-      }
-      else {
-        message.error('Email atau password salah!');
-      }
-      
+
+    } catch (err) {
+      message.error('Terjadi kesalahan saat login.');
+      console.error(err);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -121,17 +118,6 @@ const Login = () => {
             <Link to="/register" className="auth-link">
               Daftar
             </Link>
-          </div>
-
-          {/* Dummy credentials info */}
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-            <Typography.Text type="secondary" className="block mb-2">
-              Akun Dummy:
-            </Typography.Text>
-            <div className="space-y-1 text-sm">
-              <p><strong>Admin:</strong> admin@umkm.com / admin123</p>
-              <p><strong>User:</strong> user@umkm.com / user123</p>
-            </div>
           </div>
         </Form>
       </Card>

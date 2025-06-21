@@ -25,7 +25,7 @@ ChartJS.register(
   Filler
 )
 
-const Dashboard = () => {
+const DashboardAdmin = () => {
   // Data summary cards
   const stats = [
     { label: "Pendapatan Hari Ini", value: "$53,000", percent: "+55%", color: "green" },
@@ -122,5 +122,5 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default DashboardAdmin
 

@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   // If not authenticated, redirect to login
-  if (!isAuthenticated()) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     if (!hasRole) {
       // Redirect based on user role
       if (isAdmin()) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/admin" replace />;
       } else if (isUser()) {
         return <Navigate to="/guest" replace />;
       }

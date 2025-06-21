@@ -1,71 +1,121 @@
-export default function Register() {
+import React, { useState } from 'react';
+import { Form, Input, Button, Card, Typography, message } from 'antd';
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../../supabase';
+import '../../styles/Auth.css';
+
+const Register = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
+    const onFinish = async (values) => {
+        setLoading(true);
+        const { name, email, password } = values;
+
+        try {
+            // Cek apakah email sudah terdaftar
+            const { data: existingUser, error: fetchError } = await supabase
+                .from('users')
+                .select('email')
+                .eq('email', email)
+                .single();
+
+            if (existingUser) {
+                message.error('Email sudah terdaftar. Silakan gunakan email lain.');
+                setLoading(false);
+                return;
+            }
+
+            // PERINGATAN: Menyimpan password teks biasa tidak aman!
+            const { error: insertError } = await supabase
+                .from('users')
+                .insert([{ name, email, password, role: 'user' }]);
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            message.success('Registrasi berhasil! Silakan masuk.');
+            navigate('/login');
+
+        } catch (err) {
+            message.error('Gagal melakukan registrasi.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-blue-100">
-            <div className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md">
-                <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-                    ✨ Create Your Account
-                </h2>
+        <div className="auth-container">
+            <Card className="auth-card">
+                <div className="auth-header">
+                    <Typography.Title level={2} className="auth-title">
+                        Buat Akun Baru
+                    </Typography.Title>
+                    <Typography.Text type="secondary">
+                        Daftar untuk mulai berbelanja
+                    </Typography.Text>
+                </div>
 
-                <form>
-                    <div className="mb-6">
-                        <label htmlFor="email" className="block text-sm font-semibold text-gray-600 mb-2">
-                            Email Address
-                        </label>
-                        <div className="relative">
-                            <input
-                                type="email"
-                                id="email"
-                                className="w-full px-12 py-3 bg-gray-50 border border-gray-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
-                                placeholder="you@example.com"
-                            />
-                            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                📧
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="mb-6">
-                        <label htmlFor="password" className="block text-sm font-semibold text-gray-600 mb-2">
-                            Password
-                        </label>
-                        <div className="relative">
-                            <input
-                                type="password"
-                                id="password"
-                                className="w-full px-12 py-3 bg-gray-50 border border-gray-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
-                                placeholder="********"
-                            />
-                            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                🔒
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="mb-8">
-                        <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600 mb-2">
-                            Confirm Password
-                        </label>
-                        <div className="relative">
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                className="w-full px-12 py-3 bg-gray-50 border border-gray-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
-                                placeholder="********"
-                            />
-                            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                🔒
-                            </span>
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-pink-400 to-blue-400 hover:from-pink-500 hover:to-blue-500 text-white font-semibold py-3 rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300"
+                <Form
+                    name="register"
+                    onFinish={onFinish}
+                    layout="vertical"
+                    requiredMark={false}
+                    size="large"
+                >
+                    <Form.Item
+                        name="name"
+                        rules={[{ required: true, message: 'Mohon masukkan nama Anda!' }]}
                     >
-                        🚀 Register
-                    </button>
-                </form>
-            </div>
+                        <Input
+                            prefix={<UserOutlined />}
+                            placeholder="Nama Lengkap"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Mohon masukkan email Anda!' },
+                            { type: 'email', message: 'Mohon masukkan email yang valid!' }
+                        ]}
+                    >
+                        <Input
+                            prefix={<MailOutlined />}
+                            placeholder="Email"
+                            autoComplete="email"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Mohon masukkan password Anda!' }]}
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined />}
+                            placeholder="Password"
+                        />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" block loading={loading}>
+                            Daftar
+                        </Button>
+                    </Form.Item>
+
+                    <div className="auth-footer">
+                        <Typography.Text type="secondary">Sudah punya akun?</Typography.Text>
+                        <Link to="/login" className="auth-link">
+                            Masuk
+                        </Link>
+                    </div>
+                </Form>
+            </Card>
         </div>
     );
-}
+};
+
+export default Register;
