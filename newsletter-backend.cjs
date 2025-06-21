@@ -194,18 +194,18 @@ app.post('/api/newsletter/:id/send', async (req, res) => {
     const info = await transporter.sendMail(mailOptions);
 
     nls = loadJson(NEWSLETTERS_FILE);
-    nls[idx].status = 'completed';
-    nls[idx].lastSent = new Date();
+    const updatedNl = nls.find(nl => nl.id == req.params.id);
+    if(updatedNl) {
+      updatedNl.status = 'completed';
+      updatedNl.lastSent = new Date();
+    }
     saveJson(NEWSLETTERS_FILE, nls);
 
-    res.json({
-      success: true,
-      messageId: info.messageId,
-      recipients: emails.length
-    });
+    // Kirim respons sukses kembali ke client
+    res.json({ success: true, message: `Campaign sent to ${emails.length} subscribers.`, info });
 
-  } catch (error) {
-    console.error('❌ Newsletter send error:', error.message);
+  } catch (err) {
+    console.error('Error sending campaign:', err);
     let nls = loadJson(NEWSLETTERS_FILE);
     const idx = nls.findIndex(nl => nl.id == req.params.id);
     if (idx !== -1) {
@@ -213,7 +213,7 @@ app.post('/api/newsletter/:id/send', async (req, res) => {
       nls[idx].lastSent = new Date();
       saveJson(NEWSLETTERS_FILE, nls);
     }
-    res.status(500).json({ error: 'Failed to send newsletter', details: error.message });
+    res.status(500).json({ error: 'Failed to send newsletter', details: err.message });
   }
 });
 

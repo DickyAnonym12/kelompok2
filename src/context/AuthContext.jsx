@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../supabase'; // Import Supabase client
 
 const AuthContext = createContext();
 
@@ -7,45 +8,55 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on app start
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    // 1. Cek sesi yang sedang aktif dari Supabase
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session ? session.user : null);
+      setLoading(false);
+    };
+
+    getSession();
+
+    // 2. Dengarkan perubahan status otentikasi (login, logout)
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session ? session.user : null);
+        setLoading(false);
+      }
+    );
+
+    // 3. Hentikan listener saat komponen di-unmount
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
+  // Fungsi login dan logout sekarang akan ditangani langsung oleh Supabase UI (di halaman Login)
+  // atau dengan memanggil supabase.auth.signInWithPassword() dan supabase.auth.signOut().
+  // Jadi kita tidak perlu fungsi login/logout manual di sini.
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('user');
-  };
+  }
 
-  const isAuthenticated = user !== null;
+  // Cek apakah pengguna sudah login
+  const isAuthenticated = !!user;
 
-  const isAdmin = () => {
-    return user && user.role === 'admin';
-  };
+  // Cek role pengguna (role disimpan di metadata)
+  const userRole = user?.user_metadata?.role || null;
 
-  const isUser = () => {
-    return user && user.role === 'user';
+  const value = {
+    user,
+    logout,
+    isAuthenticated,
+    userRole,
+    loading
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      login, 
-      logout, 
-      isAuthenticated,
-      isAdmin, 
-      isUser,
-      loading 
-    }}>
-      {children}
+    <AuthContext.Provider value={value}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 }

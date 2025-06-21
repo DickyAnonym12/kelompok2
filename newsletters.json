@@ -1,24 +1,5 @@
 [
   {
-    "id": 1749773961828,
-    "title": "Halo",
-    "content": "<p>Haloha</p>",
-    "status": "stopped",
-    "createdAt": "2025-06-13T00:19:21.828Z",
-    "lastSent": "2025-06-13T00:41:34.016Z",
-    "users": [
-      "dicky.wijayaa01@gmail.com"
-    ]
-  },
-  {
-    "id": 1750247520031,
-    "title": "Haloo",
-    "content": "<p>makasi sudah subscribe</p><p></p>",
-    "status": "completed",
-    "createdAt": "2025-06-18T11:52:00.031Z",
-    "lastSent": "2025-06-18T12:20:10.366Z"
-  },
-  {
     "id": 1750249461805,
     "title": "Halo lagi",
     "content": "<p>percobaan ke 2</p>",
@@ -50,11 +31,11 @@
     "lastSent": "2025-06-19T19:11:32.414Z"
   },
   {
-    "id": 1750382269982,
-    "title": "Promo 6.6",
-    "content": "<p>TES</p><img src=\"https://magazine.urbanicon.co.id/wp-content/uploads/2020/06/66sale-blog-cover.jpg\">",
+    "id": 1750521533957,
+    "title": "lagi",
+    "content": "<p>tes</p><img src=\"https://d2xjmi1k71iy2m.cloudfront.net/dairyfarm/id/pageImages/promo-lebaran-di-ikea-sale-2025.jpeg\">",
     "status": "completed",
-    "createdAt": "2025-06-20T01:17:49.982Z",
-    "lastSent": "2025-06-20T01:18:02.213Z"
+    "createdAt": "2025-06-21T15:58:53.957Z",
+    "lastSent": "2025-06-21T16:04:38.675Z"
   }
 ]

@@ -14,30 +14,34 @@ const Register = () => {
         const { name, email, password } = values;
 
         try {
-            // Cek apakah email sudah terdaftar
-            const { data: existingUser, error: fetchError } = await supabase
-                .from('users')
-                .select('email')
-                .eq('email', email)
-                .single();
+            // Gunakan Supabase Auth untuk registrasi pengguna baru
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    // Simpan nama dan role di metadata pengguna
+                    data: {
+                        full_name: name,
+                        role: 'admin' // DAFTAR SEBAGAI ADMIN UNTUK TESTING
+                    }
+                }
+            });
 
-            if (existingUser) {
-                message.error('Email sudah terdaftar. Silakan gunakan email lain.');
+            if (error) {
+                // Tangani error dari Supabase (misal: email sudah terdaftar, password lemah)
+                message.error(error.message);
                 setLoading(false);
                 return;
             }
 
-            // PERINGATAN: Menyimpan password teks biasa tidak aman!
-            const { error: insertError } = await supabase
-                .from('users')
-                .insert([{ name, email, password, role: 'user' }]);
-
-            if (insertError) {
-                throw insertError;
+            if (data.user) {
+                 // Jika pendaftaran berhasil, beri notifikasi.
+                 // Jika Anda mengaktifkan konfirmasi email, pengguna harus verifikasi dulu.
+                message.success('Registrasi berhasil! Silakan cek email Anda untuk verifikasi (jika aktif), lalu login.');
+                navigate('/login');
+            } else {
+                message.error('Gagal membuat pengguna. Mohon coba lagi.');
             }
-
-            message.success('Registrasi berhasil! Silakan masuk.');
-            navigate('/login');
 
         } catch (err) {
             message.error('Gagal melakukan registrasi.');
@@ -55,7 +59,7 @@ const Register = () => {
                         Buat Akun Baru
                     </Typography.Title>
                     <Typography.Text type="secondary">
-                        Daftar untuk mulai berbelanja
+                        Daftar untuk mulai mengelola
                     </Typography.Text>
                 </div>
 
@@ -92,7 +96,7 @@ const Register = () => {
 
                     <Form.Item
                         name="password"
-                        rules={[{ required: true, message: 'Mohon masukkan password Anda!' }]}
+                        rules={[{ required: true, message: 'Mohon masukkan password minimal 6 karakter!' }, {min: 6, message: 'Password minimal 6 karakter!'}]}
                     >
                         <Input.Password
                             prefix={<LockOutlined />}

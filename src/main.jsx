@@ -1,16 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
-import App from './App.jsx'
-import { FaqProvider } from './context/FaqContext';
+import App from './App.jsx';
 import { StyleProvider } from '@ant-design/cssinjs';
 
-createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <StyleProvider hashPriority="high">
-      <FaqProvider>
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <StyleProvider hashPriority="high">
         <App />
-      </FaqProvider>
-    </StyleProvider>
-  </BrowserRouter>,
-)
+      </StyleProvider>
+    </BrowserRouter>
+  </React.StrictMode>
+);
