@@ -22,7 +22,7 @@ const Register = () => {
                     // Simpan nama dan role di metadata pengguna
                     data: {
                         full_name: name,
-                        role: 'admin' // DAFTAR SEBAGAI ADMIN UNTUK TESTING
+                        role: 'user'
                     }
                 }
             });

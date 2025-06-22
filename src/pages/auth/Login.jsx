@@ -36,10 +36,11 @@ const Login = () => {
         const userRole = data.user.user_metadata?.role;
         if (userRole === 'admin') {
           navigate('/admin');
+        } else if (userRole === 'user') {
+          navigate('/');
         } else {
-          // Arahkan ke halaman asal jika ada, atau ke dashboard utama
-          const from = location.state?.from?.pathname || '/';
-          navigate(from, { replace: true });
+          // Jika role tidak diketahui, arahkan ke halaman utama
+          navigate('/');
         }
       } else {
         message.error('Terjadi kesalahan, pengguna tidak ditemukan setelah login.');
