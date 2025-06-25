@@ -1,126 +1,192 @@
-import React from 'react'
+import React, { useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
-  LineElement,
   PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
-  Filler,
-} from 'chart.js'
-import { Bar, Line } from 'react-chartjs-2'
+} from 'chart.js';
+import { Scatter, Line } from 'react-chartjs-2';
+import Papa from 'papaparse';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  LineElement,
   PointElement,
+  LineElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
-)
+  Legend
+);
+
+const clusterColors = ["green", "blue", "orange", "red", "violet"];
 
 const DashboardAdmin = () => {
-  // Data summary cards
-  const stats = [
-    { label: "Pendapatan Hari Ini", value: "$53,000", percent: "+55%", color: "green" },
-    { label: "Pengguna Hari Ini", value: "2,300", percent: "+3%", color: "blue" },
-    { label: "Klien Baru", value: "+3,462", percent: "-2%", color: "red" },
-    { label: "Penjualan", value: "$103,430", percent: "+5%", color: "purple" },
-  ]
+  const [visualData, setVisualData] = useState([]);
+  const [elbowData, setElbowData] = useState([]);
 
-  // Data untuk grafik Penjualan Bulanan (Bar Chart)
-  const barData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
-    datasets: [
-      {
-        label: "Penjualan (dalam ribuan $)",
-        data: [12, 19, 14, 17, 22, 30, 28, 26, 32, 35, 40, 45],
-        backgroundColor: "rgba(99, 102, 241, 0.7)", // purple-600
-      },
-    ],
-  }
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const barOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Penjualan Bulanan Tahun Ini' },
-    },
-  }
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        const allPoints = [];
+        const preparedForElbow = [];
 
-  // Data untuk grafik Pertumbuhan Pelanggan (Line Chart)
-  const lineData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
-    datasets: [
-      {
-        label: "Jumlah Pelanggan",
-        data: [50, 75, 120, 180, 220, 260, 300, 350, 400, 430, 460, 500],
-        borderColor: "rgba(59, 130, 246, 1)", // blue-500
-        backgroundColor: "rgba(59, 130, 246, 0.3)",
-        fill: true,
-        tension: 0.3,
-        pointRadius: 4,
-      },
-    ],
-  }
+        for (const row of results.data) {
+          const rowData = {
+            gender: parseInt(row.gender),
+            kategori_produk: parseInt(row.kategori_produk),
+            warna: parseInt(row.warna),
+            ukuran: parseInt(row.ukuran),
+            metode_pembayaran: parseInt(row.metode_pembayaran),
+            jumlah_pembelian: parseFloat(row.jumlah_pembelian),
+            total_belanja: parseFloat(row.total_belanja),
+            frekuensi_kunjungan: parseFloat(row.frekuensi_kunjungan),
+          };
 
-  const lineOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Pertumbuhan Pelanggan Tahun Ini' },
-    },
-  }
+          // Data untuk visualisasi
+          try {
+            const response = await fetch("https://ec67-35-237-188-71.ngrok-free.app/predict/visual", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(rowData),
+            });
 
-  const colorMap = {
-    green: 'text-green-600',
-    blue: 'text-blue-600',
-    red: 'text-red-600',
-    purple: 'text-purple-600',
+            const data = await response.json();
+            if (data.success) {
+              allPoints.push({
+                x: data.annual_income,
+                y: data.spending_score,
+                cluster: data.cluster,
+              });
+            }
+          } catch (err) {
+            console.error("Gagal prediksi visualisasi:", row, err);
+          }
+
+          // Data untuk Elbow
+          preparedForElbow.push([
+            rowData.gender,
+            rowData.kategori_produk,
+            rowData.warna,
+            rowData.ukuran,
+            rowData.metode_pembayaran,
+            rowData.jumlah_pembelian,
+            rowData.total_belanja,
+            rowData.frekuensi_kunjungan
+          ]);
+        }
+
+        // Fetch inertia untuk Elbow Method
+        try {
+          const res = await fetch("https://ec67-35-237-188-71.ngrok-free.app/elbow", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: preparedForElbow }),
+          });
+          const resData = await res.json();
+          if (resData.success) {
+            setElbowData(resData.inertia);
+          }
+        } catch (err) {
+          console.error("Gagal ambil data Elbow:", err);
+        }
+
+        setVisualData(allPoints);
+      }
+    });
   };
 
-  const percentColorMap = {
-    green: 'text-green-500',
-    blue: 'text-blue-500',
-    red: 'text-red-500',
-    purple: 'text-purple-500',
+  // Scatter chart untuk visualisasi klaster
+  const scatterDatasets = clusterColors.map((color, idx) => ({
+    label: `Cluster ${idx}`,
+    data: visualData.filter(p => p.cluster === idx),
+    backgroundColor: color,
+    pointRadius: 5
+  }));
+
+  const scatterChart = { datasets: scatterDatasets };
+
+  const scatterOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'right' },
+      title: { display: true, text: 'Visualisasi Klaster Pelanggan' },
+    },
+    scales: {
+      x: { title: { display: true, text: 'Annual Income' } },
+      y: { title: { display: true, text: 'Spending Score' } },
+    },
+  };
+
+  // Line chart untuk Elbow Method
+  const elbowChart = {
+    labels: Array.from({ length: elbowData.length }, (_, i) => i + 1),
+    datasets: [{
+      label: 'Inertia',
+      data: elbowData,
+      fill: false,
+      borderColor: 'rgba(54, 162, 235, 1)',
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      tension: 0.3,
+      pointRadius: 5
+    }]
+  };
+
+  const elbowOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Elbow Method: Menentukan Jumlah Klaster' }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Jumlah Klaster' } },
+      y: { title: { display: true, text: 'Inertia' } }
+    }
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-4 sm:space-y-8">
-      {/* Statistik utama */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {stats.map(({ label, value, percent, color }) => (
-          <div key={label} className="bg-white rounded-xl shadow p-4 sm:p-5">
-            <p className="text-sm text-gray-500">{label}</p>
-            <h2 className={`text-xl sm:text-2xl font-bold ${colorMap[color]} flex items-center gap-2`}>
-              {value}
-              <span className={`text-xs font-semibold ${percentColorMap[color]}`}>{percent}</span>
-            </h2>
-          </div>
-        ))}
+    <div className="p-4 space-y-8">
+      {/* Upload File */}
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h2 className="text-lg font-semibold mb-2">Upload Data CSV</h2>
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileUpload}
+          className="border p-2 rounded-md"
+        />
+        <p className="text-sm text-gray-500 mt-1">
+          Kolom: gender, kategori_produk, warna, ukuran, metode_pembayaran, jumlah_pembelian, total_belanja, frekuensi_kunjungan
+        </p>
       </div>
 
-      {/* Grafik Penjualan Bulanan */}
-      <div className="bg-white rounded-xl shadow p-4 sm:p-6 h-[300px] sm:h-[400px]">
-        <Bar options={barOptions} data={barData} />
-      </div>
+      {/* Grafik Visualisasi Klaster */}
+      {visualData.length > 0 && (
+        <div className="bg-white p-4 rounded-xl shadow">
+          <h2 className="text-lg font-semibold mb-2">Visualisasi Klaster</h2>
+          <Scatter data={scatterChart} options={scatterOptions} />
+        </div>
+      )}
 
-      {/* Grafik Pertumbuhan Pelanggan */}
-      <div className="bg-white rounded-xl shadow p-4 sm:p-6 h-[300px] sm:h-[400px]">
-        <Line options={lineOptions} data={lineData} />
-      </div>
+      {/* Grafik Elbow Method */}
+      {elbowData.length > 0 && (
+        <div className="bg-white p-4 rounded-xl shadow">
+          <h2 className="text-lg font-semibold mb-2">Elbow Method</h2>
+          <Line data={elbowChart} options={elbowOptions} />
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default DashboardAdmin
-
+export default DashboardAdmin;
