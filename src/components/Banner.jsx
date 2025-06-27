@@ -17,13 +17,15 @@ export default function Banner() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl w-full z-10">
         {/* Text Content */}
         <div className="space-y-8 text-center md:text-left">
-          <h1 className="font-jost-bold text-6xl sm:text-7xl md:text-8xl lg:text-[94px] text-gray-900 leading-tight">
-            <span className="text-orange-500">Se</span>dap
+        <h1 className="font-jost-bold text-6xl sm:text-7xl md:text-8xl lg:text-[94px] text-gray-900 leading-tight uppercase tracking-widest text-center">
+            <span className="text-[#C39B58]">Ivan</span> Gunawan
+            <br />
+            <span className="text-[#C39B58]">Prive</span>
           </h1>
 
+
           <p className="text-gray-500 text-xl font-muli-reguler text=[20px] max-w-md mx-auto md:mx-0">
-            Jelajahi cita rasa autentik dari berbagai macam makanan enak yang
-            kami sajikan khusus untuk Anda
+          Rasakan pengalaman berbusana yang tak sekadar indah, tapi memancarkan kepribadian sejati Anda
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">

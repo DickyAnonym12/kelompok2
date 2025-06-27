@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Scatter, Line } from 'react-chartjs-2';
+import { Scatter, Line, Bar } from 'react-chartjs-2';
 import Papa from 'papaparse';
 
 ChartJS.register(
@@ -29,6 +29,8 @@ const clusterColors = ["green", "blue", "orange", "red", "violet"];
 const DashboardAdmin = () => {
   const [visualData, setVisualData] = useState([]);
   const [elbowData, setElbowData] = useState([]);
+  const [barData, setBarData] = useState(null);
+  const [clusterStats, setClusterStats] = useState({});
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -53,9 +55,9 @@ const DashboardAdmin = () => {
             frekuensi_kunjungan: parseFloat(row.frekuensi_kunjungan),
           };
 
-          // Data untuk visualisasi
+          // Kirim ke /predict/visual untuk scatter chart
           try {
-            const response = await fetch("https://ec67-35-237-188-71.ngrok-free.app/predict/visual", {
+            const response = await fetch("https://8b25-34-148-205-214.ngrok-free.app/predict/visual", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(rowData),
@@ -73,7 +75,7 @@ const DashboardAdmin = () => {
             console.error("Gagal prediksi visualisasi:", row, err);
           }
 
-          // Data untuk Elbow
+          // Data mentah (belum di-scale) untuk /elbow dan /cluster_stats
           preparedForElbow.push([
             rowData.gender,
             rowData.kategori_produk,
@@ -86,9 +88,42 @@ const DashboardAdmin = () => {
           ]);
         }
 
-        // Fetch inertia untuk Elbow Method
+        setVisualData(allPoints);
+
+        // Bar Chart data
+        const clusterCounts = {};
+        allPoints.forEach(p => {
+          clusterCounts[p.cluster] = (clusterCounts[p.cluster] || 0) + 1;
+        });
+
+        setBarData({
+          labels: Object.keys(clusterCounts).map(k => `Cluster ${k}`),
+          datasets: [{
+            label: 'Jumlah Anggota',
+            data: Object.values(clusterCounts),
+            backgroundColor: Object.keys(clusterCounts).map(k => clusterColors[k] || 'gray'),
+          }]
+        });
+
+        // Ambil statistik klaster
         try {
-          const res = await fetch("https://ec67-35-237-188-71.ngrok-free.app/elbow", {
+          const statRes = await fetch("https://8b25-34-148-205-214.ngrok-free.app/cluster_stats", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: preparedForElbow }),
+          });
+
+          const statData = await statRes.json();
+          if (statData.success) {
+            setClusterStats(statData.stats);
+          }
+        } catch (err) {
+          console.error("Gagal ambil statistik klaster:", err);
+        }
+
+        // Ambil Elbow Method
+        try {
+          const res = await fetch("https://8b25-34-148-205-214.ngrok-free.app/elbow", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ data: preparedForElbow }),
@@ -100,13 +135,10 @@ const DashboardAdmin = () => {
         } catch (err) {
           console.error("Gagal ambil data Elbow:", err);
         }
-
-        setVisualData(allPoints);
       }
     });
   };
 
-  // Scatter chart untuk visualisasi klaster
   const scatterDatasets = clusterColors.map((color, idx) => ({
     label: `Cluster ${idx}`,
     data: visualData.filter(p => p.cluster === idx),
@@ -128,7 +160,6 @@ const DashboardAdmin = () => {
     },
   };
 
-  // Line chart untuk Elbow Method
   const elbowChart = {
     labels: Array.from({ length: elbowData.length }, (_, i) => i + 1),
     datasets: [{
@@ -170,15 +201,50 @@ const DashboardAdmin = () => {
         </p>
       </div>
 
-      {/* Grafik Visualisasi Klaster */}
+      {/* Bar Chart dan Statistik */}
+      {barData && (
+        <div className="bg-white p-4 rounded-xl shadow space-y-4">
+          <h2 className="text-lg font-semibold mb-2">Distribusi Klaster (Bar Chart)</h2>
+          <Bar
+            data={barData}
+            options={{
+              responsive: true,
+              plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Jumlah Anggota per Klaster' }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: { display: true, text: 'Jumlah Anggota' }
+                }
+              }
+            }}
+          />
+
+          {/* Statistik Otomatis */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {Object.entries(clusterStats).map(([key, stat]) => (
+              <div key={key} className="bg-gray-100 p-3 rounded-xl shadow-sm border-l-4" style={{ borderColor: clusterColors[key] }}>
+                <h4 className="font-semibold mb-1">Cluster {key}</h4>
+                <p className="text-sm text-gray-700">Rata-rata Total Belanja: Rp{Number(stat.rata_rata_total_belanja).toLocaleString()}</p>
+                <p className="text-sm text-gray-700">Rata-rata Frekuensi: {stat.rata_rata_frekuensi_kunjungan.toFixed(2)} kali</p>
+                <p className="text-sm text-gray-700">Jumlah Anggota: {stat.jumlah_anggota}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Scatter Chart */}
       {visualData.length > 0 && (
         <div className="bg-white p-4 rounded-xl shadow">
-          <h2 className="text-lg font-semibold mb-2">Visualisasi Klaster</h2>
+          <h2 className="text-lg font-semibold mb-2">Visualisasi Klaster (Scatter Chart)</h2>
           <Scatter data={scatterChart} options={scatterOptions} />
         </div>
       )}
 
-      {/* Grafik Elbow Method */}
+      {/* Elbow Method */}
       {elbowData.length > 0 && (
         <div className="bg-white p-4 rounded-xl shadow">
           <h2 className="text-lg font-semibold mb-2">Elbow Method</h2>

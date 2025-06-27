@@ -1,5 +1,5 @@
 import React from "react";
-import Sedap from "../assets/Sedap.png";
+import Ivan from "../assets/ivan.png";
 
 export default function AboutUs() {
   return (
@@ -9,10 +9,10 @@ export default function AboutUs() {
         <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-orange-100">
           <div className="flex flex-col md:flex-row">
             {/* Image Section - Left */}
-            <div className="md:w-1/2 p-8 md:p-12 bg-orange-50 flex items-center justify-center">
+            <div className="md:w-1/2 p-8 md:p-12 bg-white-50 flex items-center justify-center">
               <img
-                src={Sedap}
-                alt="Sedap"
+                src={Ivan}
+                alt="Ivan"
                 className="w-full h-auto max-h-96 object-contain rounded-lg"
               />
             </div>
