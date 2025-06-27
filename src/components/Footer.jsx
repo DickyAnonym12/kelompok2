@@ -7,12 +7,15 @@ export default function Footer() {
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Logo & Desc */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">
-            <span className="text-white">Se</span>
-            <span className="text-[#f94f4f]">dap</span>
+        <h2 className="text-2xl font-bold mb-4">
+            <span className="text-[#D4AF37]">Ivan Gunawan</span>
+            <span className="text-[#B8860B]"> Prive</span>
           </h2>
+
           <p className="text-gray-300 mb-4">
-            Cafe dengan konsep minimalis dan modern.
+            Ivan Gunawan Prive adalah brand premium dari Ivan Gunawan,
+            yang lahir sebagai bentuk apresiasi kepada wanita Indonesia
+            dengan mengedepankan produk Premium, Exclusive dan Limited.
           </p>
           <div className="flex gap-4">
             <a href="#" className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-[#f94f4f]">
@@ -30,16 +33,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Services */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">SERVICES</h3>
-          <ul className="space-y-2 text-gray-300">
-            <li>Delicious Food</li>
-            <li>Parking Area</li>
-            <li>Free Wifi</li>
-          </ul>
-        </div>
-
+   
         {/* Important Link */}
         <div>
           <h3 className="text-xl font-semibold mb-4">IMPORTANT LINK</h3>
@@ -71,7 +65,7 @@ export default function Footer() {
       </div>
 
       <div className="mt-10 border-t border-gray-600 pt-6 text-center text-gray-400 text-sm">
-        Copyright © 2025 Bert. All Rights Reserved.
+        Copyright © 2025 Kelompok2. All Rights Reserved.
       </div>
     </footer>
   );

@@ -1,14 +1,14 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer"; 
-import Dashboard from "../pages/Dashboard";
+import { Outlet } from "react-router-dom";
 
 export default function GuestLayout() {
   return (
     <>
       <Header />
       <main>
-        <Dashboard />
+        <Outlet />
       </main>
       <Footer />
     </>

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../supabase";
+import { useCart } from "../context/CartContext";
 
 function ProductCard({ produk }) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { addToCart } = useCart();
 
   const handleBuyClick = () => {
     if (!isAuthenticated) {
@@ -55,6 +57,13 @@ function ProductCard({ produk }) {
             Stok Habis
           </button>
         )}
+
+        <button
+          onClick={() => addToCart(produk)}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-xl mt-2"
+        >
+          Tambah ke Cart
+        </button>
       </div>
     </div>
   );

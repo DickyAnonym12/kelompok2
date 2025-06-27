@@ -1,12 +1,14 @@
 import React from "react";
 import { FaShoppingCart, FaSearch, FaEnvelope, FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import sedap from "../assets/Sedap.png";
+import { useNavigate, Link } from "react-router-dom";
+import sedap from "../assets/ivan.png";
+import { useCart } from "../context/CartContext";
 
 function Header() {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+  const { cart } = useCart();
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -35,9 +37,6 @@ function Header() {
               className="h-full w-auto object-contain"
             />
           </div>
-          <span className="text-3xl font-bold text-gray-900">
-            Se<span className="text-orange-500">dap</span>
-          </span>
         </a>
 
         {/* Navigation Menu */}
@@ -88,14 +87,16 @@ function Header() {
               </div>
 
               {/* Cart Icon with Badge */}
-              <div className="relative flex items-center justify-center">
+              <Link to="/cart" className="relative flex items-center justify-center">
                 <div className="p-3 bg-gray-100 rounded-full text-gray-600 cursor-pointer hover:text-red-500">
                   <FaShoppingCart />
                 </div>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-1.5">
-                  2
-                </span>
-              </div>
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-1.5">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
 
               {/* Logout Button */}
               <button
