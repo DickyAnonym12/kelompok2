@@ -91,6 +91,7 @@ export default function LaporanPenjualan() {
       unit_price: Number(form.price),
       discount: Number(form.discount),
       total: Number(form.total),
+      created_at: new Date().toISOString(),
     };
 
     if (editingItem) {

@@ -9,6 +9,7 @@ import {
     User,
     LogIn,
     UserPlus,
+    PieChart,      // untuk segmentasi
 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -16,6 +17,7 @@ const menuItems = [
     { name: 'Dashboard', icon: <LayoutDashboard />, path: '/admin' },
     { name: 'Produk', icon: <Box />, path: '/admin/products' },
     { name: 'Laporan Penjualan', icon: <BarChart2 />, path: '/admin/laporan-penjualan' },
+    { name: 'Segmentasi', icon: <PieChart />, path: '/admin/segmentasi' },
     { name: 'Pelanggan', icon: <Users />, path: '/admin/pelanggan' },
     { name: 'FAQ Admin', icon: <Settings />, path: '/admin/faq-admin' },
     { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/admin/pesanan-butik' },

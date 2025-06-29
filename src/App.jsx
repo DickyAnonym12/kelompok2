@@ -33,6 +33,7 @@ import EditCampaignForm from './pages/EditCampaignForm';
 const Membership = React.lazy(() => import("./pages/MemberShip"));
 const UserListPage = React.lazy(() => import("./pages/UserListPage"));
 const Cart = React.lazy(() => import("./pages/Cart"));
+const Segmentasi = React.lazy(() => import("./pages/Segmentasi"));
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
                 <Route path="pesanan-butik" element={<PesananButik />} />
                 <Route path="pesanan-butik/:id" element={<DetailPesananButik />} />
                 <Route path="laporan-penjualan" element={<LaporanPenjualan />} />
+                <Route path="segmentasi" element={<Segmentasi />} />
                 <Route path="faq-admin" element={<FaqAdmin />} />
                 <Route path="newsletter-admin" element={<NewsletterAdmin />} />
                 <Route path="newsletter-campaigns" element={<NewsletterCampaigns />} />

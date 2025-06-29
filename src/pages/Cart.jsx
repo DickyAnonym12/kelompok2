@@ -10,23 +10,87 @@ export default function Cart() {
 
   const total = cart.reduce((sum, item) => sum + item.price_product * item.qty, 0);
 
+  const testInsert = async () => {
+    try {
+      console.log('Testing simple insert...');
+      
+      const testData = {
+        product_name: 'Test Product',
+        quantity: 1,
+        unit_price: 10000,
+        discount: 0,
+        total: 10000,
+        created_at: new Date().toISOString(),
+      };
+      
+      console.log('Test data:', testData);
+      
+      const { data, error } = await supabase
+        .from("laporan_penjualan")
+        .insert([testData])
+        .select();
+      
+      if (error) {
+        console.error('Test insert failed:', error);
+        alert('Test insert failed: ' + error.message);
+      } else {
+        console.log('Test insert successful:', data);
+        alert('Test insert successful! Check console for details.');
+      }
+    } catch (error) {
+      console.error('Test insert error:', error);
+      alert('Test insert error: ' + error.message);
+    }
+  };
+
   const handleCheckout = async () => {
-    for (const item of cart) {
-      await supabase.from("laporan_penjualan").insert([
-        {
+    try {
+      console.log('Starting checkout process...', cart);
+      
+      // Insert semua item ke laporan_penjualan
+      const insertPromises = cart.map(async (item) => {
+        const dataToInsert = {
           product_name: item.name_product,
           quantity: item.qty,
           unit_price: item.price_product,
           discount: 0,
           total: item.price_product * item.qty,
-        },
-      ]);
+          created_at: new Date().toISOString(),
+        };
+        
+        console.log('Inserting data:', dataToInsert);
+        
+        const { data, error } = await supabase
+          .from("laporan_penjualan")
+          .insert([dataToInsert])
+          .select();
+        
+        if (error) {
+          console.error('Error inserting item:', error);
+          throw error;
+        }
+        
+        console.log('Successfully inserted:', data);
+        return data;
+      });
+      
+      // Tunggu semua insert selesai
+      await Promise.all(insertPromises);
+      
+      console.log('All items inserted successfully!');
+      
+      // Clear cart dan tampilkan sukses
+      clearCart();
+      setShowSuccess(true);
+      
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      alert('Gagal melakukan checkout. Silakan coba lagi.');
     }
-    clearCart();
-    setShowSuccess(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
   };
 
   if (cart.length === 0 && !showSuccess) {
@@ -90,12 +154,20 @@ export default function Cart() {
           <span className="text-xl font-bold text-gray-700">
             Total: <span className="text-green-600">Rp {total.toLocaleString("id-ID")}</span>
           </span>
-          <button
-            onClick={handleCheckout}
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
-          >
-            Checkout
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={testInsert}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow transition"
+            >
+              Test Insert
+            </button>
+            <button
+              onClick={handleCheckout}
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
+            >
+              Checkout
+            </button>
+          </div>
         </div>
       </div>
       {showSuccess && (
