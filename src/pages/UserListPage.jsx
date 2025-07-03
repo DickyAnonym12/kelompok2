@@ -52,7 +52,7 @@ function UserListPage() {
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-indigo-700">User Management</h1>
+      <h1 className="text-2xl font-bold text-black">User Management</h1>
       
       <UserForm
         addUser={addUser}
@@ -62,7 +62,7 @@ function UserListPage() {
       />
 
       <div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-6">
-        <h2 className="text-xl font-semibold mb-4">User List</h2>
+        <h2 className="text-xl font-semibold mb-4 text-black">User List</h2>
         <ul className="space-y-4">
           {users.map(user => (
             <li key={user.id} className="border p-4 my-2 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center">

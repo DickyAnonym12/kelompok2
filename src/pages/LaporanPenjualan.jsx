@@ -156,7 +156,7 @@ export default function LaporanPenjualan() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 space-y-6">
       <div className="flex items-center justify-between mb-4 flex-col sm:flex-row gap-4 sm:gap-0">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Laporan Penjualan</h1>
+        <h1 className="text-3xl font-bold text-black">Laporan Penjualan</h1>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button onClick={openAddModal} className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
             + Tambah Data
@@ -174,7 +174,7 @@ export default function LaporanPenjualan() {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white text-left text-sm font-semibold">
+              <tr className="bg-gradient-to-r from-yellow-400 via-orange-400 to-amber-400 text-white text-left text-sm font-semibold">
                 <th className="px-6 py-4 rounded-l-xl">No</th>
                 <th className="px-6 py-4">Product</th>
                 <th className="px-6 py-4">Quantity</th>
@@ -184,19 +184,19 @@ export default function LaporanPenjualan() {
                 <th className="px-6 py-4 rounded-r-xl">Aksi</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
+            <tbody className="bg-white divide-y divide-yellow-100 text-sm text-gray-800">
               {loading ? (
                 <tr><td colSpan="7" className="text-center py-8">
                   <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-500"></div>
                     <span className="ml-3">Loading...</span>
                   </div>
                 </td></tr>
               ) : (
                 data.map((item, index) => (
-                  <tr key={item.id} className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 ${index % 2 === 0 ? 'bg-gray-50/50' : 'bg-white'}`}>
+                  <tr key={item.id} className={`hover:bg-gradient-to-r hover:from-yellow-50 hover:to-orange-50 transition-all duration-200 ${index % 2 === 0 ? 'bg-yellow-50/50' : 'bg-white'}`}>
                     <td className="px-6 py-4">
-                      <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                      <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                         {item.no}
                       </div>
                     </td>
