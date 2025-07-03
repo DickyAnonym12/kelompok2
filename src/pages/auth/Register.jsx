@@ -21,7 +21,7 @@ const Register = () => {
                 options: {
                     // Simpan nama dan role di metadata pengguna
                     data: {
-                        full_name: name,
+                        name: name,
                         role: 'user'
                     }
                 }

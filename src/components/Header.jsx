@@ -1,22 +1,30 @@
 import React from "react";
 import { FaShoppingCart, FaSearch, FaEnvelope, FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import sedap from "../assets/ivan.png";
 import { useCart } from "../context/CartContext";
 
 function Header() {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { cart } = useCart();
 
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 
@@ -47,15 +55,25 @@ function Header() {
               { name: "About", id: "about" },
               { name: "Products", id: "products" },
               { name: "Testimonial", id: "testimonial" },
-              { name: "FAQ", id: "faq" }
+              { name: "FAQ", id: "faq" },
+              { name: "Membership", id: "membership", isLink: true }
             ].map((item) => (
               <li key={item.name}>
-                <button
-                  onClick={() => scrollToSection(item.id)}
-                  className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
-                >
-                  {item.name}
-                </button>
+                {item.isLink ? (
+                  <Link
+                    to="/membership"
+                    className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
+                  >
+                    {item.name}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
+                  >
+                    {item.name}
+                  </button>
+                )}
               </li>
             ))}
           </ul>

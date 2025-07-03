@@ -7,10 +7,12 @@ import testimonials from "../assets/testimonials.json";
 import HeaderUtama from "../components/HeaderUtama.jsx";
 import Newsletter from '../components/Newsletter';
 import { useFaq } from '../context/FaqContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
   const { faq } = useFaq();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const { user, role } = useAuth();
 
   const toggleFaq = (idx) => {
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
