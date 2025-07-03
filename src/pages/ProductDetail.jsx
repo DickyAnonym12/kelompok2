@@ -1,26 +1,50 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import axios from "axios"
+import { supabase } from "../supabase"
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProductDetail() {
     const { id } = useParams()
     const [product, setProduct] = useState(null)
     const [error, setError] = useState(null)
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
-        axios
-            .get(`https://dummyjson.com/products/${id}`)
-            .then((response) => {
-                if (response.status !== 200) {
-                    setError(response.message)
-                    return
-                }
-                setProduct(response.data)
-            })
-            .catch((err) => {
-                setError(err.message)
-            })
-    }, [id])
+        const fetchProduct = async () => {
+            const { data, error } = await supabase
+                .from("product")
+                .select("*")
+                .eq("id", id)
+                .single();
+            if (error) {
+                setError(error.message);
+            } else {
+                setProduct(data);
+            }
+        };
+        fetchProduct();
+    }, [id]);
+
+    const handleAddToCart = () => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        } else {
+            addToCart(product);
+            alert(`Produk ${product.title || product.name_product} ditambahkan ke keranjang!`);
+        }
+    };
+
+    const handleBuyNow = () => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        } else {
+            addToCart(product);
+            navigate('/cart');
+        }
+    };
 
     if (error) return <div className="text-red-600 p-4">{error}</div>
     if (!product) return <div className="p-4">Loading...</div>
@@ -28,16 +52,30 @@ export default function ProductDetail() {
     return (
         <div className="p-6 bg-white rounded-xl shadow-lg max-w-lg mx-auto mt-6">
             <img
-                src={product.thumbnail}
-                alt={product.title}
+                src={product.thumbnail || product.image_product}
+                alt={product.title || product.name_product}
                 className="rounded-xl mb-4 w-full h-48 object-cover"
             />
-            <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
-            <p className="text-gray-600 mb-1">Kategori: {product.category}</p>
-            <p className="text-gray-600 mb-1">Brand: {product.brand}</p>
+            <h2 className="text-2xl font-bold mb-2">{product.title || product.name_product}</h2>
+            <p className="text-gray-600 mb-1">Kategori: {product.category || product.size_product}</p>
+            <p className="text-gray-600 mb-1">Brand: {product.brand || product.color_product}</p>
             <p className="text-gray-800 font-semibold text-lg">
-                Harga: Rp {product.price * 1000}
+                Harga: Rp {product.price ? product.price * 1000 : Number(product.price_product).toLocaleString('id-ID')}
             </p>
+            <div className="flex gap-4 mt-6">
+                <button
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-semibold shadow"
+                >
+                    Tambah ke Cart
+                </button>
+                <button
+                    onClick={handleBuyNow}
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold shadow"
+                >
+                    Beli Sekarang
+                </button>
+            </div>
         </div>
     )
 }

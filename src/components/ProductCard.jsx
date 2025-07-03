@@ -42,27 +42,11 @@ function ProductCard({ produk }) {
         </p>
         <p className="text-sm text-gray-400 mb-5">Stok: {produk.stock_product}</p>
 
-        {produk.stock_product > 0 ? (
-          <button
-            onClick={handleBuyClick}
-            className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white py-3 rounded-xl shadow-lg hover:from-orange-500 hover:to-orange-700 transition duration-300 font-semibold tracking-wide"
-          >
-            Beli Sekarang
-          </button>
-        ) : (
-          <button
-            className="w-full bg-gray-300 text-gray-600 py-3 rounded-xl cursor-not-allowed select-none"
-            disabled
-          >
-            Stok Habis
-          </button>
-        )}
-
         <button
-          onClick={() => addToCart(produk)}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-xl mt-2"
+          onClick={() => navigate(`/products/${produk.id}`)}
+          className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white py-3 rounded-xl shadow-lg hover:from-orange-500 hover:to-orange-700 transition duration-300 font-semibold tracking-wide"
         >
-          Tambah ke Cart
+          Detail
         </button>
       </div>
     </div>

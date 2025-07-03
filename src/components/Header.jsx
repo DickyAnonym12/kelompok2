@@ -21,8 +21,8 @@ function Header() {
         }
       }, 100);
     } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
+    const element = document.getElementById(sectionId);
+    if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
@@ -67,12 +67,12 @@ function Header() {
                     {item.name}
                   </Link>
                 ) : (
-                  <button
-                    onClick={() => scrollToSection(item.id)}
-                    className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
-                  >
-                    {item.name}
-                  </button>
+                <button
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-[18px] text-[#2E2E3A] hover:text-orange-500 transition"
+                >
+                  {item.name}
+                </button>
                 )}
               </li>
             ))}
