@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { supabase } from "../supabase";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQty, clearCart } = useCart();
+  const { user, refetchUserProfile } = useAuth();
   const navigate = useNavigate();
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -44,8 +46,15 @@ export default function Cart() {
   };
 
   const handleCheckout = async () => {
+    if (!user) {
+      alert("Anda harus login untuk melakukan checkout.");
+      navigate("/login");
+      return;
+    }
+
     try {
-      console.log('Starting checkout process...', cart);
+      console.log("--- PROSES CHECKOUT DIMULAI ---");
+      console.log("User yang sedang checkout:", user);
       
       // Insert semua item ke laporan_penjualan
       const insertPromises = cart.map(async (item) => {
@@ -56,28 +65,54 @@ export default function Cart() {
           discount: 0,
           total: item.price_product * item.qty,
           created_at: new Date().toISOString(),
+          user_id: user.id,
         };
         
         console.log('Inserting data:', dataToInsert);
         
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from("laporan_penjualan")
-          .insert([dataToInsert])
-          .select();
+          .insert([dataToInsert]);
         
-        if (error) {
-          console.error('Error inserting item:', error);
-          throw error;
-        }
-        
-        console.log('Successfully inserted:', data);
-        return data;
+        if (error) throw error;
       });
       
       // Tunggu semua insert selesai
       await Promise.all(insertPromises);
       
-      console.log('All items inserted successfully!');
+      console.log("Semua item berhasil dimasukkan ke laporan penjualan.");
+      
+      // Hitung dan update poin
+      const total = cart.reduce((sum, item) => sum + item.price_product * item.qty, 0);
+      console.log(`Total belanja: ${total}`);
+
+      const pointsEarned = Math.floor(total / 100000);
+      console.log(`Poin yang didapat dari transaksi ini (1 per 100.000): ${pointsEarned}`);
+
+      if (pointsEarned > 0) {
+        const currentPoints = user.profile?.points || 0;
+        const newTotalPoints = currentPoints + pointsEarned;
+
+        console.log(`Mencoba update poin menjadi ${newTotalPoints} untuk user ID: ${user.id}`);
+        
+        // Memanggil fungsi RPC, bukan update tabel langsung
+        const { error: rpcError } = await supabase.rpc('update_user_points', {
+          new_points: newTotalPoints
+        });
+
+        if (rpcError) {
+          console.error("--- ERROR SAAT MEMANGGIL RPC update_user_points ---");
+          console.error("Pesan Error:", rpcError.message);
+          console.error("Detail Error:", rpcError);
+          alert(`Gagal memperbarui poin via RPC. Error: ${rpcError.message}`);
+        } else {
+          console.log("--- SUKSES MEMANGGIL RPC update_user_points ---");
+          // Memuat ulang data profil pengguna untuk mendapatkan poin terbaru
+          await refetchUserProfile();
+        }
+      } else {
+        console.log("Tidak ada poin yang didapat dari transaksi ini.");
+      }
       
       // Clear cart dan tampilkan sukses
       clearCart();

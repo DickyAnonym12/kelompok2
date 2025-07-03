@@ -32,14 +32,23 @@ const Login = () => {
         message.success('Login berhasil!');
         // AuthContext akan otomatis update dari onAuthStateChange
 
-        // Arahkan berdasarkan peran dari metadata pengguna
-        const userRole = data.user.user_metadata?.role;
-        if (userRole === 'admin') {
+        // Ambil profil dari tabel users
+        const { data: profile, error: profileError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', data.user.id)
+          .single();
+
+        if (profileError) {
+          message.error('Gagal mengambil data profil.');
+          setLoading(false);
+          return;
+        }
+
+        // Redirect sesuai role dari tabel users
+        if (profile.role === 'admin') {
           navigate('/admin');
-        } else if (userRole === 'user') {
-          navigate('/');
         } else {
-          // Jika role tidak diketahui, arahkan ke halaman utama
           navigate('/');
         }
       } else {

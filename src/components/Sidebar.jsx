@@ -10,6 +10,7 @@ import {
     LogIn,
     UserPlus,
     PieChart,      // untuk segmentasi
+    MessageCircle,
 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -18,12 +19,13 @@ const menuItems = [
     { name: 'Produk', icon: <Box />, path: '/admin/products' },
     { name: 'Laporan Penjualan', icon: <BarChart2 />, path: '/admin/laporan-penjualan' },
     { name: 'Segmentasi', icon: <PieChart />, path: '/admin/segmentasi' },
-    { name: 'Pelanggan', icon: <Users />, path: '/admin/pelanggan' },
+    // { name: 'Pelanggan', icon: <Users />, path: '/admin/pelanggan' },
     { name: 'FAQ Admin', icon: <Settings />, path: '/admin/faq-admin' },
-    { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/admin/pesanan-butik' },
+    // { name: 'Pesanan Butik', icon: <ShoppingCart />, path: '/admin/pesanan-butik' },
     { name: 'Newsletter', icon: <BarChart2 />, path: '/admin/newsletter-admin' },
     { name: 'Member Ship', icon: <MdOutlineWorkspacePremium />, path: '/admin/membership' },
     { name: 'User List', icon: <Users />, path: '/admin/user-list' },
+    { name: 'Customer Service', icon: <MessageCircle />, path: '/admin/live-chat' },
 ]
 
 const accountItems = [

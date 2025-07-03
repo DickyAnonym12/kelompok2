@@ -30,10 +30,14 @@ const NewsletterAdmin = React.lazy(() => import("./pages/NewsletterAdmin"));
 const NewsletterCampaigns = React.lazy(() => import("./pages/NewsletterCampaigns"));
 import { AddCampaignForm } from "./pages/NewsletterCampaigns";
 import EditCampaignForm from './pages/EditCampaignForm';
-const Membership = React.lazy(() => import("./pages/MemberShip"));
+const MembershipPage = React.lazy(() => import("./pages/MemberShip"));
+const MembershipAdminPage = React.lazy(() => import("./pages/MembershipAdmin"));
 const UserListPage = React.lazy(() => import("./pages/UserListPage"));
 const Cart = React.lazy(() => import("./pages/Cart"));
 const Segmentasi = React.lazy(() => import("./pages/Segmentasi"));
+const LiveChatAdmin = React.lazy(() => import("./pages/LiveChatAdmin"));
+const LiveChatUser = React.lazy(() => import("./pages/LiveChatUser"));
+const CustomerServiceUser = React.lazy(() => import("./pages/CustomerServiceUser"));
 
 function App() {
   return (
@@ -47,6 +51,21 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/membership" element={
+                  <ProtectedRoute>
+                    <MembershipPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/live-chat" element={
+                  <ProtectedRoute>
+                    <LiveChatUser />
+                  </ProtectedRoute>
+                } />
+                <Route path="/customer-service" element={
+                  <ProtectedRoute>
+                    <CustomerServiceUser />
+                  </ProtectedRoute>
+                } />
               </Route>
 
               {/* Auth Routes */}
@@ -75,9 +94,10 @@ function App() {
                 <Route path="newsletter-admin" element={<NewsletterAdmin />} />
                 <Route path="newsletter-campaigns" element={<NewsletterCampaigns />} />
                 <Route path="newsletter-campaigns/add" element={<AddCampaignForm />} />
-                <Route path="newsletter-campaigns/:id/edit" element={<EditCampaignForm />} />
-                <Route path="membership" element={<Membership />} />
+                <Route path="newsletter-campaigns/:id" element={<EditCampaignForm />} />
+                <Route path="membership" element={<MembershipAdminPage />} />
                 <Route path="user-list" element={<UserListPage />} />
+                <Route path="live-chat" element={<LiveChatAdmin />} />
               </Route>
 
               {/* Catch all */}
