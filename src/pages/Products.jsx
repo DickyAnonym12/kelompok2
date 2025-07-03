@@ -139,7 +139,7 @@ export default function Products() {
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      <PageHeader title="Product Management" breadcrumb={breadcrumb} />
+      <PageHeader title="Product Management" breadcrumb={breadcrumb} headingClassName="text-black" />
 
       {error && (
         <div className="bg-red-100 p-4 text-red-700 rounded-lg flex items-center">
@@ -160,7 +160,7 @@ export default function Products() {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className="bg-indigo-600 text-white text-left text-sm font-semibold">
+              <tr className="bg-gradient-to-r from-yellow-400 via-orange-400 to-amber-400 text-white text-left text-sm font-semibold">
                 <th className="px-6 py-4 rounded-l-xl">Gambar</th>
                 <th className="px-6 py-4">Nama Produk</th>
                 <th className="px-6 py-4">Harga</th>
@@ -170,13 +170,13 @@ export default function Products() {
                 <th className="px-6 py-4 rounded-r-xl">Aksi</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
+            <tbody className="bg-white divide-y divide-yellow-100 text-sm text-gray-800">
               {products.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50">
+                <tr key={product.id} className="hover:bg-gradient-to-r hover:from-yellow-50 hover:to-orange-50 transition-all duration-200">
                   <td className="px-6 py-4">
                     {product.image_product ? 
                       <img src={product.image_product} alt={product.name_product} className="h-12 w-12 object-cover rounded-md" /> : 
-                      <div className="h-12 w-12 bg-gray-200 rounded-md"></div>
+                      <div className="h-12 w-12 bg-yellow-100 rounded-md"></div>
                     }
                   </td>
                   <td className="px-6 py-4 font-medium">{product.name_product}</td>
@@ -185,7 +185,7 @@ export default function Products() {
                   <td className="px-6 py-4">{product.size_product}</td>
                   <td className="px-6 py-4">{product.color_product}</td>
                   <td className="px-6 py-4 flex gap-2">
-                    <button onClick={() => openEditModal(product)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+                    <button onClick={() => openEditModal(product)} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-3 py-1 rounded">Edit</button>
                     <button onClick={() => openDeleteModal(product)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
                   </td>
                 </tr>

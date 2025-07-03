@@ -67,7 +67,7 @@ export default function FaqAdmin() {
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex items-center justify-between mb-4 flex-col sm:flex-row gap-4 sm:gap-0">
-        <h1 className="text-2xl font-bold text-indigo-700">Kelola FAQ</h1>
+        <h1 className="text-2xl font-bold text-black">Kelola FAQ</h1>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={openAddModal}
@@ -81,19 +81,19 @@ export default function FaqAdmin() {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className="bg-indigo-600 text-white text-left text-sm font-semibold">
+              <tr className="bg-gradient-to-r from-yellow-400 via-orange-400 to-amber-400 text-white text-left text-sm font-semibold">
                 <th className="px-6 py-4 rounded-l-xl">Pertanyaan</th>
                 <th className="px-6 py-4">Jawaban</th>
                 <th className="px-6 py-4 rounded-r-xl">Aksi</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-800">
+            <tbody className="bg-white divide-y divide-yellow-100 text-sm text-gray-800">
               {faq.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
+                <tr key={item.id} className="hover:bg-gradient-to-r hover:from-yellow-50 hover:to-orange-50 transition-all duration-200">
                   <td className="px-6 py-4 font-medium text-gray-700 w-1/3">{item.question}</td>
                   <td className="px-6 py-4 w-1/2">{item.answer}</td>
                   <td className="px-6 py-4 flex gap-2">
-                    <button onClick={() => openEditModal(item)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+                    <button onClick={() => openEditModal(item)} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-3 py-1 rounded">Edit</button>
                     <button onClick={() => handleDelete(item)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
                   </td>
                 </tr>

@@ -100,7 +100,7 @@ const CustomerService = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-lg bg-white shadow-xl rounded-xl flex flex-col h-96 border border-gray-200">
-        <div className="bg-blue-600 text-white px-4 py-2 rounded-t-xl font-bold">Customer Service</div>
+        <div className="bg-yellow-400 text-black px-4 py-2 rounded-t-xl font-bold">Customer Service</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-50">
           {messages.length === 0 && (
             <div className="flex justify-start">

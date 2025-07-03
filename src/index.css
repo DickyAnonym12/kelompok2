@@ -66,3 +66,51 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Force hide scrollbar for Sidebar in all browsers, with aggressive !important */
+.sidebar-scrollbar,
+.sidebar-scrollbar * {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+}
+.sidebar-scrollbar::-webkit-scrollbar,
+.sidebar-scrollbar *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  background: transparent !important;
+}
+.sidebar-scrollbar::-webkit-scrollbar-thumb,
+.sidebar-scrollbar *::-webkit-scrollbar-thumb {
+  background: transparent !important;
+}
+.sidebar-scrollbar::-webkit-scrollbar-track,
+.sidebar-scrollbar *::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* Custom ultra-thin scrollbar for Sidebar - only visible on hover */
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 3px; /* Lebih tipis */
+  background: transparent;
+}
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  transition: background 0.3s;
+  border-radius: 8px;
+}
+.sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #fbbf24 40%, #fb923c 100%);
+}
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: #fff7ed;
+  border-radius: 8px;
+}
+
+/* Firefox */
+.sidebar-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.sidebar-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}

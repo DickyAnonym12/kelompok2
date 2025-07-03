@@ -103,28 +103,28 @@ const CustomerServiceAdmin = () => {
 
   return (
     <div className="mx-auto max-w-2xl w-full bg-white shadow-2xl rounded-xl flex flex-col h-[32rem] border border-gray-200 mt-8">
-      <div className="bg-blue-700 text-white px-4 py-2 rounded-t-xl font-bold flex items-center justify-between">
+      <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-amber-400 text-black px-4 py-2 rounded-t-xl font-bold flex items-center justify-between">
         <span>Customer Service Admin</span>
       </div>
       <div className="flex flex-1 overflow-hidden">
         {/* User List */}
-        <div className="w-1/3 border-r bg-gray-50 overflow-y-auto">
-          <div className="font-semibold text-gray-700 px-3 py-2 border-b">User</div>
-          {users.length === 0 && <div className="p-3 text-gray-400 text-sm">Belum ada pesan masuk</div>}
+        <div className="w-1/3 border-r bg-yellow-50 overflow-y-auto">
+          <div className="font-semibold text-yellow-700 px-3 py-2 border-b bg-gradient-to-r from-yellow-100 to-orange-100">User</div>
+          {users.length === 0 && <div className="p-3 text-yellow-400 text-sm">Belum ada pesan masuk</div>}
           {users.map((u) => (
             <button
               key={u.id}
-              className={`w-full text-left px-3 py-2 hover:bg-blue-100 ${selectedUser?.id === u.id ? 'bg-blue-200 font-bold' : ''}`}
+              className={`w-full text-left px-3 py-2 transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-100 hover:to-orange-100 ${selectedUser?.id === u.id ? 'bg-gradient-to-r from-yellow-300 to-orange-200 font-bold text-yellow-900' : 'text-yellow-800'}`}
               onClick={() => setSelectedUser(u)}
             >
               <div>{u.name || u.email || u.id}</div>
-              <div className="text-xs text-gray-500">{u.email}</div>
+              <div className="text-xs text-yellow-600">{u.email}</div>
             </button>
           ))}
         </div>
         {/* Chat Area */}
         <div className="flex-1 flex flex-col">
-          <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-50">
+          <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-yellow-50">
             {selectedUser ? (
               messages.map((msg) => (
                 <div
@@ -132,10 +132,10 @@ const CustomerServiceAdmin = () => {
                   className={`flex ${msg.sender_role === 'admin' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`px-3 py-2 rounded-lg max-w-xs ${
+                    className={`px-3 py-2 rounded-lg max-w-xs transition-all duration-200 ${
                       msg.sender_role === 'admin'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-800'
+                        ? 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white'
+                        : 'bg-white text-yellow-900 border border-yellow-100'
                     }`}
                   >
                     {msg.message}
@@ -146,13 +146,13 @@ const CustomerServiceAdmin = () => {
                 </div>
               ))
             ) : (
-              <div className="text-gray-400 text-center mt-10">Pilih user untuk melihat chat</div>
+              <div className="text-yellow-400 text-center mt-10">Pilih user untuk melihat chat</div>
             )}
             <div ref={messagesEndRef} />
           </div>
           {/* Input */}
           {selectedUser && (
-            <form onSubmit={sendMessage} className="p-2 border-t flex flex-col gap-2">
+            <form onSubmit={sendMessage} className="p-2 border-t flex flex-col gap-2 bg-yellow-50">
               {errorMsg && <div className="text-red-600 text-sm mb-1">{errorMsg}</div>}
               <div className="flex gap-2">
                 <input
@@ -163,7 +163,7 @@ const CustomerServiceAdmin = () => {
                 />
                 <button
                   type="submit"
-                  className="bg-blue-700 text-white px-4 py-1 rounded-lg hover:bg-blue-800"
+                  className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 py-1 rounded-lg hover:from-yellow-500 hover:to-orange-500 transition-all duration-200"
                 >
                   Kirim
                 </button>

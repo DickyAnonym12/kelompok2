@@ -40,7 +40,7 @@ const Sidebar = () => {
     const isActive = (path) => location.pathname === path
 
     return (
-        <aside className="bg-gradient-to-br from-white via-amber-50/30 to-orange-50/50 w-64 md:w-64 h-full md:h-screen shadow-2xl px-6 py-8 block md:rounded-none rounded-r-3xl max-w-full overflow-y-auto border-r-4 border-gradient-to-b from-yellow-400 to-orange-500 backdrop-blur-sm relative">
+        <aside className="sidebar-scrollbar h-screen overflow-y-auto bg-gradient-to-br from-white via-amber-50/30 to-orange-50/50 w-64 md:w-64 shadow-2xl px-6 py-8 block md:rounded-none rounded-r-3xl max-w-full border-r-4 border-gradient-to-b from-yellow-400 to-orange-500 backdrop-blur-sm relative">
             {/* Decorative Background Elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-200/20 to-orange-300/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 left-0 w-24 h-24 bg-gradient-to-tr from-amber-200/20 to-yellow-300/10 rounded-full blur-2xl"></div>
