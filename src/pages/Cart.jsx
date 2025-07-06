@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { supabase } from "../supabase";
 import { useNavigate } from "react-router-dom";
@@ -128,6 +128,59 @@ export default function Cart() {
     }
   };
 
+  // Fungsi untuk memanggil Midtrans Snap
+  const payWithMidtrans = async () => {
+    if (!user) {
+      alert("Anda harus login untuk melakukan pembayaran.");
+      navigate("/login");
+      return;
+    }
+    // Siapkan data order
+    const order_id = `ORDER-${Date.now()}`;
+    const gross_amount = cart.reduce((sum, item) => sum + item.price_product * item.qty, 0);
+    const customer_details = {
+      first_name: user.profile?.full_name || user.email,
+      email: user.email,
+    };
+    const items = cart.map(item => ({
+      id: item.id,
+      price: item.price_product,
+      quantity: item.qty,
+      name: item.name_product,
+    }));
+    try {
+      const res = await fetch('http://localhost:5000/api/midtrans/create-transaction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id, gross_amount, customer_details, items })
+      });
+      const data = await res.json();
+      if (window.snap && data.snapToken) {
+        window.snap.pay(data.snapToken, {
+          onSuccess: function(result){
+            alert('Pembayaran sukses!');
+            handleCheckout();
+          },
+          onPending: function(result){
+            alert('Transaksi belum selesai, silakan selesaikan pembayaran.');
+          },
+          onError: function(result){
+            alert('Pembayaran gagal!');
+          },
+          onClose: function(){
+            alert('Anda menutup popup tanpa menyelesaikan pembayaran');
+          }
+        });
+      } else if (!window.snap) {
+        alert('Midtrans Snap belum termuat. Silakan refresh halaman atau pastikan script Snap sudah ditambahkan di index.html.');
+      } else {
+        alert('Gagal mendapatkan token pembayaran.');
+      }
+    } catch (err) {
+      alert('Gagal memproses pembayaran: ' + err.message);
+    }
+  };
+
   if (cart.length === 0 && !showSuccess) {
     return (
       <div className="max-w-xl mx-auto p-10 mt-16 bg-white rounded-2xl shadow-lg text-center">
@@ -201,6 +254,12 @@ export default function Cart() {
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
             >
               Checkout
+            </button>
+            <button
+              onClick={payWithMidtrans}
+              className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
+            >
+              Bayar dengan Midtrans
             </button>
           </div>
         </div>

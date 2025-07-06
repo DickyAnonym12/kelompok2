@@ -26,6 +26,7 @@
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.511.0",
+    "midtrans-client": "^1.4.3",
     "mongoose": "^8.15.1",
     "node-cron": "^4.1.1",
     "nodemailer": "^7.0.3",

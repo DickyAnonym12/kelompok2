@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+
+* {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+}
+
+.font-poppins {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,16 +23,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   margin: 0;
   display: flex;
   place-items: center;
@@ -46,9 +48,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -59,9 +63,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
@@ -70,19 +76,24 @@ button:focus-visible {
 /* Force hide scrollbar for Sidebar in all browsers, with aggressive !important */
 .sidebar-scrollbar,
 .sidebar-scrollbar * {
-  scrollbar-width: none !important; /* Firefox */
-  -ms-overflow-style: none !important; /* IE/Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
+  -ms-overflow-style: none !important;
+  /* IE/Edge */
 }
+
 .sidebar-scrollbar::-webkit-scrollbar,
 .sidebar-scrollbar *::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
   background: transparent !important;
 }
+
 .sidebar-scrollbar::-webkit-scrollbar-thumb,
 .sidebar-scrollbar *::-webkit-scrollbar-thumb {
   background: transparent !important;
 }
+
 .sidebar-scrollbar::-webkit-scrollbar-track,
 .sidebar-scrollbar *::-webkit-scrollbar-track {
   background: transparent !important;
@@ -90,17 +101,21 @@ button:focus-visible {
 
 /* Custom ultra-thin scrollbar for Sidebar - only visible on hover */
 .sidebar-scrollbar::-webkit-scrollbar {
-  width: 3px; /* Lebih tipis */
+  width: 3px;
+  /* Lebih tipis */
   background: transparent;
 }
+
 .sidebar-scrollbar::-webkit-scrollbar-thumb {
   background: transparent;
   transition: background 0.3s;
   border-radius: 8px;
 }
+
 .sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #fbbf24 40%, #fb923c 100%);
 }
+
 .sidebar-scrollbar::-webkit-scrollbar-track {
   background: #fff7ed;
   border-radius: 8px;
@@ -111,6 +126,7 @@ button:focus-visible {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
+
 .sidebar-scrollbar::-webkit-scrollbar {
   display: none !important;
 }

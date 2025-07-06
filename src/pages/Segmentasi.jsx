@@ -73,7 +73,7 @@ const Segmentasi = () => {
             };
 
             try {
-              const response = await fetch("https://4018-34-139-113-4.ngrok-free.app/predict/visual", {
+              const response = await fetch("https://ba37-35-231-78-7.ngrok-free.app/predict/visual", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(rowData),
@@ -124,7 +124,7 @@ const Segmentasi = () => {
           });
 
           try {
-            const statRes = await fetch("https://4018-34-139-113-4.ngrok-free.app/cluster_stats", {
+            const statRes = await fetch("https://ba37-35-231-78-7.ngrok-free.app/cluster_stats", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ data: preparedForElbow }),
@@ -139,7 +139,7 @@ const Segmentasi = () => {
           }
 
           try {
-            const res = await fetch("https://4018-34-139-113-4.ngrok-free.app/elbow", {
+            const res = await fetch("https://ba37-35-231-78-7.ngrok-free.app/elbow", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ data: preparedForElbow }),
