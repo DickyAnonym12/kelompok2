@@ -118,38 +118,46 @@ const LiveChat = () => {
   };
 
   return (
-    <div className="mx-auto max-w-lg w-full bg-white shadow-xl rounded-xl flex flex-col h-96 border border-gray-200 mt-8">
-      <div className="bg-green-600 text-white px-4 py-2 rounded-t-xl font-bold flex items-center">
+    <div className="mx-auto max-w-lg w-full bg-white shadow-xl rounded-xl flex flex-col h-80 sm:h-96 border border-gray-200 mt-6 sm:mt-8">
+      <div className="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-t-xl font-bold flex items-center text-sm sm:text-base">
         <span className="mr-2">🤖</span>
         Live Chat Bot
       </div>
-      <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 bg-gray-50">
+        {messages.length === 0 && (
+          <div className="flex justify-start">
+            <div className="px-2 sm:px-3 py-2 rounded-lg max-w-xs bg-gray-200 text-gray-800 text-sm sm:text-base">
+              Halo! Ada yang bisa kami bantu? Tim customer service kami siap membantu Anda.
+              <div className="text-xs text-right mt-1 opacity-60">Customer Service</div>
+            </div>
+          </div>
+        )}
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={`flex ${msg.sender_role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`px-3 py-2 rounded-lg max-w-xs ${
+              className={`px-2 sm:px-3 py-2 rounded-lg max-w-xs text-sm sm:text-base ${
                 msg.sender_role === 'user'
-                  ? 'bg-green-500 text-white'
+                  ? 'bg-blue-500 text-white'
                   : 'bg-gray-200 text-gray-800'
               }`}
             >
-              <div className="whitespace-pre-line">{msg.message}</div>
+              {msg.message}
               <div className="text-xs text-right mt-1 opacity-60">
-                {msg.sender_role === 'bot' ? 'Bot' : new Date(msg.created_at).toLocaleTimeString()}
+                {new Date(msg.created_at).toLocaleTimeString()}
               </div>
             </div>
           </div>
         ))}
         {isTyping && (
           <div className="flex justify-start">
-            <div className="px-3 py-2 rounded-lg bg-gray-200 text-gray-800">
-              <div className="flex items-center space-x-1">
+            <div className="px-2 sm:px-3 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm sm:text-base">
+              <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
               <div className="text-xs text-right mt-1 opacity-60">Bot sedang mengetik...</div>
             </div>
@@ -157,25 +165,25 @@ const LiveChat = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={sendMessage} className="p-2 border-t flex flex-col gap-2">
-        {errorMsg && <div className="text-red-600 text-sm mb-1">{errorMsg}</div>}
-        <div className="flex gap-2">
+      <div className="p-2 sm:p-3 border-t border-gray-200">
+        <form onSubmit={sendMessage} className="flex space-x-2">
           <input
-            className="flex-1 border rounded-lg px-2 py-1"
+            type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Tanyakan sesuatu..."
+            placeholder="Ketik pesan..."
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
             disabled={isTyping}
           />
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-1 rounded-lg hover:bg-green-700 disabled:opacity-50"
-            disabled={isTyping}
+            disabled={!input.trim() || isTyping}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           >
             Kirim
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

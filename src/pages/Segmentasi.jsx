@@ -208,71 +208,79 @@ const Segmentasi = () => {
   };
 
   return (
-    <div className="p-4 space-y-8">
-      <div className="bg-white p-6 rounded-xl shadow">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Segmentasi Pelanggan</h1>
-        <p className="text-gray-600">Analisis dan visualisasi segmentasi pelanggan menggunakan machine learning</p>
+    <div className="p-4 sm:p-6 space-y-6 sm:space-y-8">
+      <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Segmentasi Pelanggan</h1>
+        <p className="text-sm sm:text-base text-gray-600">Analisis dan visualisasi segmentasi pelanggan menggunakan machine learning</p>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow relative">
-        <h2 className="text-lg font-semibold mb-4">Upload Data CSV</h2>
-        {isLoading && (
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-20 rounded-xl">
-            <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-orange-500"></div>
-            <p className="mt-4 text-lg font-semibold text-gray-700">
-              Menganalisis data, mohon tunggu...
-            </p>
+      <div className="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 sm:space-y-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Upload Data CSV</h2>
+        <div className="space-y-3 sm:space-y-4">
+          <div>
+            <label className="block text-sm sm:text-base font-medium mb-2 text-gray-700">
+              Pilih file CSV dengan kolom: Annual Income, Spending Score
+            </label>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm sm:text-base"
+            />
           </div>
-        )}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileUpload}
-            disabled={isLoading}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 disabled:opacity-50 disabled:cursor-not-allowed"
-          />
+          {isLoading && (
+            <div className="text-center py-4">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <p className="mt-2 text-sm sm:text-base text-gray-600">Memproses data...</p>
+            </div>
+          )}
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded text-sm sm:text-base">
+              {error}
+            </div>
+          )}
         </div>
-        <p className="text-sm text-gray-500 mt-3">
-          <strong>Format CSV yang dibutuhkan:</strong><br />
-          Kolom: gender, kategori_produk, warna, ukuran, metode_pembayaran, jumlah_pembelian, total_belanja, frekuensi_kunjungan
-        </p>
       </div>
 
-      {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
-          <p className="font-bold">Terjadi Kesalahan</p>
-          <p>{error}</p>
+      {elbowData.length > 0 && (
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 sm:space-y-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Elbow Method</h2>
+          <div className="h-64 sm:h-80">
+            <Line data={elbowChart} options={elbowOptions} />
+          </div>
         </div>
       )}
 
       {barData && (
-        <div className="bg-white p-6 rounded-xl shadow space-y-6">
-          <h2 className="text-xl font-semibold text-gray-800">Distribusi Klaster (Bar Chart)</h2>
-          <Bar
-            data={barData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Jumlah Anggota per Klaster' }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: { display: true, text: 'Jumlah Anggota' }
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 sm:space-y-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Distribusi Klaster (Bar Chart)</h2>
+          <div className="h-64 sm:h-80">
+            <Bar
+              data={barData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: 'top' },
+                  title: { display: true, text: 'Jumlah Anggota per Klaster' }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Jumlah Anggota' }
+                  }
                 }
-              }
-            }}
-          />
+              }}
+            />
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {Object.entries(clusterStats).map(([key, stat]) => (
-              <div key={key} className="bg-gray-50 p-4 rounded-xl shadow-sm border-l-4" style={{ borderColor: clusterColors[key] }}>
-                <h4 className="font-semibold mb-2 text-gray-800">{clusterNames[key] || `Cluster ${key}`}</h4>
-                <p className="text-sm text-gray-700 mb-1">Rata-rata Total Belanja: Rp{Number(stat.rata_rata_total_belanja).toLocaleString()}</p>
-                <p className="text-sm text-gray-700 mb-1">Rata-rata Frekuensi: {stat.rata_rata_frekuensi_kunjungan.toFixed(2)} kali</p>
-                <p className="text-sm text-gray-700 font-semibold">Jumlah Anggota: {stat.jumlah_anggota}</p>
+              <div key={key} className="bg-gray-50 p-3 sm:p-4 rounded-xl shadow-sm border-l-4" style={{ borderColor: clusterColors[key] }}>
+                <h4 className="font-semibold mb-2 text-gray-800 text-sm sm:text-base">{clusterNames[key] || `Cluster ${key}`}</h4>
+                <p className="text-xs sm:text-sm text-gray-700 mb-1">Rata-rata Total Belanja: Rp{Number(stat.rata_rata_total_belanja).toLocaleString()}</p>
+                <p className="text-xs sm:text-sm text-gray-700 mb-1">Rata-rata Frekuensi: {stat.rata_rata_frekuensi_kunjungan.toFixed(2)} kali</p>
+                <p className="text-xs sm:text-sm text-gray-700 font-semibold">Jumlah Anggota: {stat.jumlah_anggota}</p>
               </div>
             ))}
           </div>
@@ -280,16 +288,11 @@ const Segmentasi = () => {
       )}
 
       {visualData.length > 0 && (
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Visualisasi Klaster (Scatter Chart)</h2>
-          <Scatter data={scatterChart} options={scatterOptions} />
-        </div>
-      )}
-
-      {elbowData.length > 0 && (
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Elbow Method</h2>
-          <Line data={elbowChart} options={elbowOptions} />
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">Visualisasi Klaster (Scatter Chart)</h2>
+          <div className="h-64 sm:h-80">
+            <Scatter data={scatterChart} options={scatterOptions} />
+          </div>
         </div>
       )}
     </div>

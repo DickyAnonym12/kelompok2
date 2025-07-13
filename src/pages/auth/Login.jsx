@@ -66,10 +66,10 @@ const Login = () => {
     <div className="auth-container">
       <Card className="auth-card">
         <div className="auth-header">
-          <Typography.Title level={2} className="auth-title">
+          <Typography.Title level={2} className="auth-title text-xl sm:text-2xl">
             Selamat Datang
           </Typography.Title>
-          <Typography.Text type="secondary">
+          <Typography.Text type="secondary" className="text-sm sm:text-base">
             Silakan masuk ke akun Anda
           </Typography.Text>
         </div>
@@ -80,6 +80,7 @@ const Login = () => {
           layout="vertical"
           requiredMark={false}
           size="large"
+          className="space-y-4 sm:space-y-5"
         >
           <Form.Item
             name="email"
@@ -92,6 +93,7 @@ const Login = () => {
               prefix={<UserOutlined />}
               placeholder="Email"
               autoComplete="email"
+              className="text-sm sm:text-base"
             />
           </Form.Item>
 
@@ -103,18 +105,19 @@ const Login = () => {
               prefix={<LockOutlined />}
               placeholder="Password"
               autoComplete="current-password"
+              className="text-sm sm:text-base"
             />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block loading={loading}>
+            <Button type="primary" htmlType="submit" block loading={loading} className="text-sm sm:text-base">
               Masuk
             </Button>
           </Form.Item>
 
           <div className="auth-footer">
-            <Typography.Text type="secondary">Belum punya akun?</Typography.Text>
-            <Link to="/register" className="auth-link">
+            <Typography.Text type="secondary" className="text-sm sm:text-base">Belum punya akun?</Typography.Text>
+            <Link to="/register" className="auth-link text-sm sm:text-base">
               Daftar
             </Link>
           </div>

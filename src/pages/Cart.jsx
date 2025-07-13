@@ -183,20 +183,22 @@ export default function Cart() {
 
   if (cart.length === 0 && !showSuccess) {
     return (
-      <div className="max-w-xl mx-auto p-10 mt-16 bg-white rounded-2xl shadow-lg text-center">
-        <div className="text-6xl mb-4">🛒</div>
-        <div className="text-xl font-semibold text-gray-500 mb-2">Keranjang belanja kosong</div>
-        <div className="text-gray-400 mb-6">Yuk, belanja produk favoritmu!</div>
-        <button onClick={() => navigate("/")} className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow transition">Lihat Produk</button>
+      <div className="max-w-xl mx-auto p-4 sm:p-10 mt-8 sm:mt-16 bg-white rounded-2xl shadow-lg text-center">
+        <div className="text-4xl sm:text-6xl mb-4">🛒</div>
+        <div className="text-lg sm:text-xl font-semibold text-gray-500 mb-2">Keranjang belanja kosong</div>
+        <div className="text-sm sm:text-base text-gray-400 mb-6">Yuk, belanja produk favoritmu!</div>
+        <button onClick={() => navigate("/")} className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold shadow transition text-sm sm:text-base">Lihat Produk</button>
       </div>
     );
   }
 
   return (
     <>
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg mt-12 mb-12">
-        <h2 className="text-3xl font-bold mb-8 text-center text-orange-600">🛒 Keranjang Belanja</h2>
-        <div className="overflow-x-auto">
+      <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-white rounded-2xl shadow-lg mt-8 sm:mt-12 mb-8 sm:mb-12">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-orange-600">🛒 Keranjang Belanja</h2>
+        
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm border-separate border-spacing-y-2">
             <thead>
               <tr className="bg-orange-50">
@@ -238,39 +240,79 @@ export default function Cart() {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-between items-center mt-8">
-          <span className="text-xl font-bold text-gray-700">
-            Total: <span className="text-green-600">Rp {total.toLocaleString("id-ID")}</span>
-          </span>
-          <div className="flex gap-2">
-           
-            <button
-              onClick={handleCheckout}
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
-            >
-              Checkout
-            </button>
-            <button
-              onClick={payWithMidtrans}
-              className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
-            >
-              Bayar dengan Midtrans
-            </button>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-4">
+          {cart.map((item) => (
+            <div key={item.id} className="bg-orange-50/50 rounded-xl p-4 shadow">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="font-semibold text-sm">{item.name_product}</h3>
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-red-500 hover:text-red-700 p-1"
+                  title="Hapus"
+                >
+                  🗑️
+                </button>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Harga:</span>
+                  <span>Rp {Number(item.price_product).toLocaleString("id-ID")}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>Jumlah:</span>
+                  <input
+                    type="number"
+                    min={1}
+                    value={item.qty}
+                    onChange={(e) => updateQty(item.id, Number(e.target.value))}
+                    className="w-16 text-center border rounded-lg px-2 py-1 text-sm"
+                  />
+                </div>
+                <div className="flex justify-between font-bold text-green-600">
+                  <span>Total:</span>
+                  <span>Rp {(item.price_product * item.qty).toLocaleString("id-ID")}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 sm:mt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <span className="text-lg sm:text-xl font-bold text-gray-700">
+              Total: <span className="text-green-600">Rp {total.toLocaleString("id-ID")}</span>
+            </span>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <button
+                onClick={handleCheckout}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-xl font-bold text-sm sm:text-lg shadow transition w-full sm:w-auto"
+              >
+                Checkout
+              </button>
+              <button
+                onClick={payWithMidtrans}
+                className="bg-orange-600 hover:bg-orange-700 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-xl font-bold text-sm sm:text-lg shadow transition w-full sm:w-auto"
+              >
+                Bayar dengan Midtrans
+              </button>
+            </div>
           </div>
         </div>
       </div>
       {showSuccess && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40">
-          <div className="bg-white rounded-2xl shadow-2xl p-10 flex flex-col items-center transition duration-300 scale-100">
-            <div className="bg-green-100 rounded-full p-4 mb-4">
-              <svg className="w-14 h-14 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-10 flex flex-col items-center transition duration-300 scale-100 max-w-sm w-full">
+            <div className="bg-green-100 rounded-full p-3 sm:p-4 mb-4">
+              <svg className="w-10 h-10 sm:w-14 sm:h-14 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="white" />
                 <path d="M8 12l2 2l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
             </div>
-            <div className="text-2xl font-bold text-green-600 mb-2">Pembelian Berhasil!</div>
-            <div className="text-gray-500 mb-4 text-center">Terima kasih sudah berbelanja di Ivan Gunawan Prive.<br />Anda akan diarahkan ke halaman utama.</div>
-            <button onClick={() => { setShowSuccess(false); navigate("/"); }} className="mt-2 px-6 py-2 rounded-xl bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition">Tutup</button>
+            <div className="text-xl sm:text-2xl font-bold text-green-600 mb-2 text-center">Pembelian Berhasil!</div>
+            <div className="text-sm sm:text-base text-gray-500 mb-4 text-center">Terima kasih sudah berbelanja di Ivan Gunawan Prive.<br />Anda akan diarahkan ke halaman utama.</div>
+            <button onClick={() => { setShowSuccess(false); navigate("/"); }} className="mt-2 px-4 sm:px-6 py-2 rounded-xl bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition text-sm sm:text-base">Tutup</button>
           </div>
         </div>
       )}

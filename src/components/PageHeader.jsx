@@ -19,16 +19,16 @@ export default function PageHeader({ title, breadcrumb, children }) {
     };
 
     return (
-        <div className="flex items-center justify-between p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4">
             <div className="flex flex-col">
-                <span className="text-3xl font-semibold">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-semibold">
                     {title}
                 </span>
-                <div className="flex items-center font-medium space-x-2 mt-2">
+                <div className="flex items-center font-medium space-x-1 sm:space-x-2 mt-1 sm:mt-2 text-sm sm:text-base">
                     {renderBreadcrumb()}
                 </div>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap gap-2 mt-3 sm:mt-0">
                 {children}
             </div>
         </div>

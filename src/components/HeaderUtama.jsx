@@ -7,8 +7,7 @@ export default function HeaderUtama() {
       <img
         src={butikImage}
         alt="Restoran Sedap"
-        className="w-full object-cover"
-        style={{ height: "500px" }} // Atur tinggi sesuai kebutuhan
+        className="w-full h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[500px] object-cover"
       />
     </div>
   );

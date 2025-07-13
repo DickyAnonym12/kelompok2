@@ -289,49 +289,50 @@ const DashboardAdmin = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 p-8 rounded-2xl shadow-2xl text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 p-4 sm:p-8 rounded-2xl shadow-2xl text-white relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+        <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-white/5 rounded-full blur-2xl"></div>
         
-        <div className="relative z-10 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-2 tracking-tight">Dashboard Admin</h1>
-              <p className="text-blue-100 text-lg">Selamat datang di panel admin Ivan Gunawan Prive</p>
-              <div className="flex items-center gap-2 mt-2 text-blue-200">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <h1 className="text-2xl sm:text-4xl font-bold mb-1 sm:mb-2 tracking-tight">Dashboard Admin</h1>
+              <p className="text-blue-100 text-sm sm:text-lg">Selamat datang di panel admin Ivan Gunawan Prive</p>
+              <div className="flex items-center gap-2 mt-1 sm:mt-2 text-blue-200">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-sm">Last updated: {new Date().toLocaleString('id-ID')}</span>
+                <span className="text-xs sm:text-sm">Last updated: {new Date().toLocaleString('id-ID')}</span>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => {
                 fetchDashboardData();
                 fetchMonthlySalesData();
               }}
-              className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-3 transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-105"
+              className="bg-white/20 hover:bg-white/30 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold flex items-center gap-2 sm:gap-3 transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-105 text-sm sm:text-base"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              Refresh Data
+              <span className="hidden sm:inline">Refresh Data</span>
+              <span className="sm:hidden">Refresh</span>
             </button>
             
-            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm border border-white/20">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-2 sm:p-3 bg-white/20 rounded-xl backdrop-blur-sm border border-white/20">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
@@ -340,18 +341,18 @@ const DashboardAdmin = () => {
       </div>
 
       {/* Statistik Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Total Produk */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium mb-1">Total Produk</p>
-              <p className="text-4xl font-bold">{stats.totalProducts}</p>
-              <p className="text-blue-200 text-sm mt-1">Produk tersedia</p>
+              <p className="text-blue-100 text-xs sm:text-sm font-medium mb-1">Total Produk</p>
+              <p className="text-2xl sm:text-4xl font-bold">{stats.totalProducts}</p>
+              <p className="text-blue-200 text-xs sm:text-sm mt-1">Produk tersedia</p>
             </div>
-            <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-3 sm:p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
@@ -359,16 +360,16 @@ const DashboardAdmin = () => {
         </div>
 
         {/* Total Subscriber */}
-        <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="bg-gradient-to-br from-green-500 to-green-600 p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-green-100 text-sm font-medium mb-1">Newsletter Subscribers</p>
-              <p className="text-4xl font-bold">{stats.totalSubscribers}</p>
-              <p className="text-green-200 text-sm mt-1">Pelanggan aktif</p>
+              <p className="text-green-100 text-xs sm:text-sm font-medium mb-1">Newsletter Subscribers</p>
+              <p className="text-2xl sm:text-4xl font-bold">{stats.totalSubscribers}</p>
+              <p className="text-green-200 text-xs sm:text-sm mt-1">Pelanggan aktif</p>
             </div>
-            <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-3 sm:p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
@@ -376,16 +377,16 @@ const DashboardAdmin = () => {
         </div>
 
         {/* Total Penjualan */}
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-white relative overflow-hidden sm:col-span-2 lg:col-span-1">
+          <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-orange-100 text-sm font-medium mb-1">Total Penjualan</p>
-              <p className="text-4xl font-bold">Rp{(stats.totalSales / 1000000).toFixed(1)}M</p>
-              <p className="text-orange-200 text-sm mt-1">Pendapatan total</p>
+              <p className="text-orange-100 text-xs sm:text-sm font-medium mb-1">Total Penjualan</p>
+              <p className="text-2xl sm:text-4xl font-bold">Rp{(stats.totalSales / 1000000).toFixed(1)}M</p>
+              <p className="text-orange-200 text-xs sm:text-sm mt-1">Pendapatan total</p>
             </div>
-            <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-3 sm:p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
               </svg>
             </div>
@@ -394,67 +395,72 @@ const DashboardAdmin = () => {
       </div>
 
       {/* Charts */}
-      <div className="space-y-6">
-        <div className="flex items-center gap-3">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">Analytics & Insights</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Analytics & Insights</h2>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Chart Penjualan */}
-          <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+          <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Trend Penjualan Bulanan</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">Trend Penjualan Bulanan</h3>
               <div className="p-2 bg-blue-50 rounded-lg">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
             </div>
-            <Line data={monthlySalesData} options={salesChartOptions} />
+            <div className="h-64 sm:h-80">
+              <Line data={monthlySalesData} options={salesChartOptions} />
+            </div>
           </div>
 
           {/* Chart Produk Terlaris */}
-          <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+          <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Produk Terlaris</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">Produk Terlaris</h3>
               <div className="p-2 bg-green-50 rounded-lg">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
             </div>
-            <Bar data={topProductsData} options={productsChartOptions} />
+            <div className="h-64 sm:h-80">
+              <Bar data={topProductsData} options={productsChartOptions} />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Tabel Penjualan Terbaru */}
-      <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-gray-100">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="p-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-800">Penjualan Terbaru</h2>
-              <p className="text-gray-500 text-sm">5 transaksi terakhir</p>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Penjualan Terbaru</h2>
+              <p className="text-gray-500 text-xs sm:text-sm">5 transaksi terakhir</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+            <div className="px-2 sm:px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm font-medium">
               {stats.recentSales.length} Transaksi
             </div>
           </div>
         </div>
         
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
               <tr>
@@ -487,26 +493,51 @@ const DashboardAdmin = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {sale.created_at 
-                      ? new Date(sale.created_at).toLocaleDateString('id-ID')
+                      ? new Date(sale.created_at).toLocaleDateString('id-ID', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric'
+                        })
                       : 'N/A'
                     }
                   </td>
                 </tr>
               ))}
-              {stats.recentSales.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center">
-                    <div className="flex flex-col items-center">
-                      <svg className="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                      </svg>
-                      <p className="text-gray-500 text-sm">Belum ada transaksi</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-3">
+          {stats.recentSales.slice(0, 5).map((sale, index) => (
+            <div key={index} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+                    {index + 1}
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">{sale.product_name}</span>
+                </div>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  {sale.quantity}
+                </span>
+              </div>
+              <div className="space-y-1 text-xs text-gray-600">
+                <div>Harga: Rp{sale.unit_price?.toLocaleString()}</div>
+                <div className="font-bold text-green-600">Total: Rp{sale.total?.toLocaleString()}</div>
+                <div>
+                  {sale.created_at 
+                    ? new Date(sale.created_at).toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })
+                    : 'N/A'
+                  }
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -50,28 +50,28 @@ export default function ProductDetail() {
     if (!product) return <div className="p-4">Loading...</div>
 
     return (
-        <div className="p-6 bg-white rounded-xl shadow-lg max-w-lg mx-auto mt-6">
+        <div className="p-4 sm:p-6 bg-white rounded-xl shadow-lg max-w-lg mx-auto mt-4 sm:mt-6">
             <img
                 src={product.thumbnail || product.image_product}
                 alt={product.title || product.name_product}
-                className="rounded-xl mb-4 w-full h-48 object-cover"
+                className="rounded-xl mb-4 w-full h-48 sm:h-64 object-cover"
             />
-            <h2 className="text-2xl font-bold mb-2">{product.title || product.name_product}</h2>
-            <p className="text-gray-600 mb-1">Kategori: {product.category || product.size_product}</p>
-            <p className="text-gray-600 mb-1">Brand: {product.brand || product.color_product}</p>
-            <p className="text-gray-800 font-semibold text-lg">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2">{product.title || product.name_product}</h2>
+            <p className="text-sm sm:text-base text-gray-600 mb-1">Kategori: {product.category || product.size_product}</p>
+            <p className="text-sm sm:text-base text-gray-600 mb-1">Brand: {product.brand || product.color_product}</p>
+            <p className="text-base sm:text-lg text-gray-800 font-semibold">
                 Harga: Rp {product.price ? product.price * 1000 : Number(product.price_product).toLocaleString('id-ID')}
             </p>
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-4 sm:mt-6">
                 <button
                     onClick={handleAddToCart}
-                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-semibold shadow"
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 sm:py-3 rounded-xl font-semibold shadow text-sm sm:text-base"
                 >
                     Tambah ke Cart
                 </button>
                 <button
                     onClick={handleBuyNow}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold shadow"
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 sm:py-3 rounded-xl font-semibold shadow text-sm sm:text-base"
                 >
                     Beli Sekarang
                 </button>

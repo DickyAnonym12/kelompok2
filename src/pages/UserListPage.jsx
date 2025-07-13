@@ -51,8 +51,8 @@ function UserListPage() {
   }, []);
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-black">User Management</h1>
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-black">User Management</h1>
       
       <UserForm
         addUser={addUser}
@@ -61,25 +61,25 @@ function UserListPage() {
         key={editingUser ? editingUser.id : 'add-user'}
       />
 
-      <div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-6">
-        <h2 className="text-xl font-semibold mb-4 text-black">User List</h2>
-        <ul className="space-y-4">
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-4 sm:mt-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4 text-black">User List</h2>
+        <ul className="space-y-3 sm:space-y-4">
           {users.map(user => (
-            <li key={user.id} className="border p-4 my-2 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <li key={user.id} className="border p-3 sm:p-4 my-2 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div>
-                <p className="font-semibold text-lg">{user.name}</p>
-                <p className="text-sm text-gray-600">{user.email} - <span className="font-medium text-gray-800">{user.role}</span></p>
+                <p className="font-semibold text-base sm:text-lg">{user.name}</p>
+                <p className="text-xs sm:text-sm text-gray-600">{user.email} - <span className="font-medium text-gray-800">{user.role}</span></p>
               </div>
-              <div className="space-x-2 mt-2 sm:mt-0">
+              <div className="flex space-x-2 mt-2 sm:mt-0">
                 <button
                   onClick={() => setEditingUser(user)}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => deleteUser(user.id)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                  className="bg-red-600 hover:bg-red-700 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm"
                 >
                   Delete
                 </button>

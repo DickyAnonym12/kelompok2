@@ -99,12 +99,12 @@ const CustomerService = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-lg bg-white shadow-xl rounded-xl flex flex-col h-96 border border-gray-200">
-        <div className="bg-yellow-400 text-black px-4 py-2 rounded-t-xl font-bold">Customer Service</div>
-        <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-50">
+      <div className="w-full max-w-lg bg-white shadow-xl rounded-xl flex flex-col h-80 sm:h-96 border border-gray-200">
+        <div className="bg-yellow-400 text-black px-3 sm:px-4 py-2 rounded-t-xl font-bold text-sm sm:text-base">Customer Service</div>
+        <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 bg-gray-50">
           {messages.length === 0 && (
             <div className="flex justify-start">
-              <div className="px-3 py-2 rounded-lg max-w-xs bg-gray-200 text-gray-800">
+              <div className="px-2 sm:px-3 py-2 rounded-lg max-w-xs bg-gray-200 text-gray-800 text-sm sm:text-base">
                 Halo! Ada yang bisa kami bantu? Tim customer service kami siap membantu Anda.
                 <div className="text-xs text-right mt-1 opacity-60">Customer Service</div>
               </div>
@@ -116,7 +116,7 @@ const CustomerService = () => {
               className={`flex ${msg.sender_role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`px-3 py-2 rounded-lg max-w-xs ${
+                className={`px-2 sm:px-3 py-2 rounded-lg max-w-xs text-sm sm:text-base ${
                   msg.sender_role === 'user'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-gray-800'
@@ -131,23 +131,24 @@ const CustomerService = () => {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={sendMessage} className="p-2 border-t flex flex-col gap-2">
-          {errorMsg && <div className="text-red-600 text-sm mb-1">{errorMsg}</div>}
-          <div className="flex gap-2">
+        <div className="p-2 sm:p-3 border-t border-gray-200">
+          <form onSubmit={sendMessage} className="flex space-x-2">
             <input
-              className="flex-1 border rounded-lg px-2 py-1"
+              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Tulis pesan..."
+              placeholder="Ketik pesan..."
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base"
             />
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700"
+              disabled={!input.trim()}
+              className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               Kirim
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

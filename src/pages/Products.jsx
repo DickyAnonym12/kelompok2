@@ -138,11 +138,11 @@ export default function Products() {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <PageHeader title="Product Management" breadcrumb={breadcrumb} headingClassName="text-black" />
 
       {error && (
-        <div className="bg-red-100 p-4 text-red-700 rounded-lg flex items-center">
+        <div className="bg-red-100 p-3 sm:p-4 text-red-700 rounded-lg flex items-center text-sm sm:text-base">
           <BsFillExclamationDiamondFill className="mr-2" /> {error}
         </div>
       )}
@@ -150,13 +150,14 @@ export default function Products() {
       <div className="flex justify-end">
         <button
           onClick={openAddModal}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow"
+          className="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold shadow text-sm sm:text-base"
         >
           + Tambah Produk
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-white rounded-xl shadow p-4 sm:p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
@@ -185,8 +186,8 @@ export default function Products() {
                   <td className="px-6 py-4">{product.size_product}</td>
                   <td className="px-6 py-4">{product.color_product}</td>
                   <td className="px-6 py-4 flex gap-2">
-                    <button onClick={() => openEditModal(product)} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-3 py-1 rounded">Edit</button>
-                    <button onClick={() => openDeleteModal(product)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
+                    <button onClick={() => openEditModal(product)} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-3 py-1 rounded text-xs">Edit</button>
+                    <button onClick={() => openDeleteModal(product)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Hapus</button>
                   </td>
                 </tr>
               ))}
@@ -198,24 +199,66 @@ export default function Products() {
         </div>
       </div>
 
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {products.map((product) => (
+          <div key={product.id} className="bg-white rounded-xl shadow p-4">
+            <div className="flex items-start space-x-4">
+              <div className="flex-shrink-0">
+                {product.image_product ? 
+                  <img src={product.image_product} alt={product.name_product} className="h-16 w-16 object-cover rounded-md" /> : 
+                  <div className="h-16 w-16 bg-yellow-100 rounded-md"></div>
+                }
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-medium text-gray-900 text-sm sm:text-base">{product.name_product}</h3>
+                <p className="text-sm text-gray-600">Rp {Number(product.price_product).toLocaleString('id-ID')}</p>
+                <div className="mt-2 space-y-1">
+                  <p className="text-xs text-gray-500">Stok: {product.stock_product}</p>
+                  <p className="text-xs text-gray-500">Ukuran: {product.size_product}</p>
+                  <p className="text-xs text-gray-500">Warna: {product.color_product}</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button 
+                onClick={() => openEditModal(product)} 
+                className="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-3 py-2 rounded text-xs font-medium"
+              >
+                Edit
+              </button>
+              <button 
+                onClick={() => openDeleteModal(product)} 
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-xs font-medium"
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        ))}
+        {products.length === 0 && !loading && (
+          <div className="text-center py-8 text-gray-400 text-sm">Belum ada produk.</div>
+        )}
+      </div>
+
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg relative">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-lg relative">
             <button onClick={closeModal} className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
-            <h2 className="text-xl font-bold mb-4">{editingProduct ? 'Edit Produk' : 'Tambah Produk'}</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input type="text" name="name_product" value={form.name_product} onChange={handleChange} placeholder="Nama Produk" className="w-full border rounded px-3 py-2" required />
-              <input type="number" name="price_product" value={form.price_product} onChange={handleChange} placeholder="Harga" className="w-full border rounded px-3 py-2" required />
-              <input type="number" name="stock_product" value={form.stock_product} onChange={handleChange} placeholder="Stok" className="w-full border rounded px-3 py-2" required />
-              <input type="text" name="size_product" value={form.size_product} onChange={handleChange} placeholder="Ukuran (e.g., S, M, L)" className="w-full border rounded px-3 py-2" />
-              <input type="text" name="color_product" value={form.color_product} onChange={handleChange} placeholder="Warna" className="w-full border rounded px-3 py-2" />
+            <h2 className="text-lg sm:text-xl font-bold mb-4">{editingProduct ? 'Edit Produk' : 'Tambah Produk'}</h2>
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+              <input type="text" name="name_product" value={form.name_product} onChange={handleChange} placeholder="Nama Produk" className="w-full border rounded px-3 py-2 text-sm sm:text-base" required />
+              <input type="number" name="price_product" value={form.price_product} onChange={handleChange} placeholder="Harga" className="w-full border rounded px-3 py-2 text-sm sm:text-base" required />
+              <input type="number" name="stock_product" value={form.stock_product} onChange={handleChange} placeholder="Stok" className="w-full border rounded px-3 py-2 text-sm sm:text-base" required />
+              <input type="text" name="size_product" value={form.size_product} onChange={handleChange} placeholder="Ukuran (e.g., S, M, L)" className="w-full border rounded px-3 py-2 text-sm sm:text-base" />
+              <input type="text" name="color_product" value={form.color_product} onChange={handleChange} placeholder="Warna" className="w-full border rounded px-3 py-2 text-sm sm:text-base" />
               <div>
-                <label className="block text-sm font-medium mb-1">Gambar Produk</label>
-                <input type="file" name="image_file" onChange={handleChange} className="w-full border rounded px-3 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" accept="image/*" />
+                <label className="block text-xs sm:text-sm font-medium mb-1">Gambar Produk</label>
+                <input type="file" name="image_file" onChange={handleChange} className="w-full border rounded px-3 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" accept="image/*" />
               </div>
               <div className="flex justify-end gap-2 pt-4">
-                <button type="button" onClick={closeModal} className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Batal</button>
-                <button type="submit" className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">{editingProduct ? 'Update' : 'Simpan'}</button>
+                <button type="button" onClick={closeModal} className="px-3 sm:px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm sm:text-base">Batal</button>
+                <button type="submit" className="px-3 sm:px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm sm:text-base">{editingProduct ? 'Update' : 'Simpan'}</button>
               </div>
             </form>
           </div>
@@ -223,13 +266,13 @@ export default function Products() {
       )}
 
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm relative text-center">
-            <h3 className="text-lg font-bold text-red-600 mb-4">Hapus Produk?</h3>
-            <p className="text-gray-600 mb-6">Anda yakin ingin menghapus produk "{productToDelete?.name_product}"?</p>
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-sm relative text-center">
+            <h3 className="text-base sm:text-lg font-bold text-red-600 mb-4">Hapus Produk?</h3>
+            <p className="text-gray-600 mb-6 text-sm sm:text-base">Anda yakin ingin menghapus produk "{productToDelete?.name_product}"?</p>
             <div className="flex justify-center gap-3">
-              <button onClick={cancelDelete} className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Batal</button>
-              <button onClick={confirmDelete} className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold">Ya, Hapus</button>
+              <button onClick={cancelDelete} className="px-3 sm:px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm sm:text-base">Batal</button>
+              <button onClick={confirmDelete} className="px-3 sm:px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold text-sm sm:text-base">Ya, Hapus</button>
             </div>
           </div>
         </div>

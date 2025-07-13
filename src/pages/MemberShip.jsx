@@ -44,24 +44,24 @@ const MembershipPage = () => {
     const TierIcon = tier.icon;
 
   return (
-        <div className="min-h-screen bg-gray-50 pt-32 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 pt-20 sm:pt-32 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-                <div className="bg-white rounded-2xl shadow-xl p-8 mb-12 text-center transform hover:scale-105 transition-transform duration-300">
-                    <div className={`inline-block p-5 bg-gray-100 rounded-full mb-4 border-4 border-white shadow-inner`}>
-                        <TierIcon className={`w-16 h-16 ${tier.color}`} />
+                <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-8 sm:mb-12 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div className={`inline-block p-4 sm:p-5 bg-gray-100 rounded-full mb-4 border-4 border-white shadow-inner`}>
+                        <TierIcon className={`w-12 h-12 sm:w-16 sm:h-16 ${tier.color}`} />
                     </div>
-                    <h2 className="text-3xl font-bold mt-2">{name}</h2>
-                    <p className="text-gray-500 mb-2">Your current tier</p>
-                    <p className={`text-5xl font-extrabold ${tier.color}`}>{tier.name}</p>
-                    <p className="text-xl mt-4 text-gray-700">{points.toLocaleString()} Points</p>
+                    <h2 className="text-2xl sm:text-3xl font-bold mt-2">{name}</h2>
+                    <p className="text-sm sm:text-base text-gray-500 mb-2">Your current tier</p>
+                    <p className={`text-3xl sm:text-5xl font-extrabold ${tier.color}`}>{tier.name}</p>
+                    <p className="text-lg sm:text-xl mt-4 text-gray-700">{points.toLocaleString()} Points</p>
                     
-                    <div className="w-full bg-gray-200 rounded-full h-5 mt-6 shadow-inner">
+                    <div className="w-full bg-gray-200 rounded-full h-4 sm:h-5 mt-4 sm:mt-6 shadow-inner">
                         <div
-                            className="bg-gradient-to-r from-yellow-400 to-orange-500 h-5 rounded-full"
+                            className="bg-gradient-to-r from-yellow-400 to-orange-500 h-4 sm:h-5 rounded-full"
                             style={{ width: `${progress}%` }}
                         ></div>
                     </div>
-                    <p className="text-sm text-gray-500 mt-2 text-right">
+                    <p className="text-xs sm:text-sm text-gray-500 mt-2 text-right">
                         {tier.name === 'Platinum' ? 'You are at the highest tier!' : 
                         `Progress to next tier: ${progress.toFixed(0)}%`}
                     </p>
