@@ -243,12 +243,7 @@ export default function Cart() {
             Total: <span className="text-green-600">Rp {total.toLocaleString("id-ID")}</span>
           </span>
           <div className="flex gap-2">
-            <button
-              onClick={testInsert}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm shadow transition"
-            >
-              Test Insert
-            </button>
+           
             <button
               onClick={handleCheckout}
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold text-lg shadow transition"
